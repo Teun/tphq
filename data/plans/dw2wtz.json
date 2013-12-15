@@ -1,0 +1,44 @@
+{
+  "plan":
+  {
+    "title": "Thailand, temples and cities",
+    "startDate": 1391212800000,
+    "places":[
+      {
+        "name": "Bangkok, Thailand",
+        "description":"Short description of the place",
+        "sights":[],
+        "latlng":[13.803611,100.6075],
+        "fromDay": 0,
+        "days": 3
+      },
+      {
+        "name": "Chiang Mai, Thailand",
+        "description":"Short description of the place",
+        "sights":[],
+        "latlng":[18.781752,98.95559],
+        "fromDay": 3,
+        "days": 1
+      },
+      {
+        "name": "Angkor Wat, Cambodja",
+        "description":"Short description of the place",
+        "sights":[],
+        "latlng":[13.4256,103.86],
+        "fromDay": 4,
+        "days": 1
+      }
+    ],
+    "images":[
+      {
+        "title": "Bangkok",
+        "large": "http://media-cdn.tripadvisor.com/media/photo-s/03/9b/2d/ad/bangkok.jpg",
+        "small": "http://media-cdn.tripadvisor.com/media/photo-l/03/9b/2d/ad/bangkok.jpg"
+      }
+    ]
+    
+  },
+  "author": {"name":"Teun Duynstee"},
+  "changelog":{}
+
+}

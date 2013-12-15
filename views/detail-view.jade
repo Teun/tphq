@@ -1,0 +1,36 @@
+﻿extends layout
+
+block meta
+  meta(property="og:image", content=plan.images[0].large)
+
+block content
+  div.page-header
+    div.row
+      div.col-md-11
+        h1
+          span(data-bind="text:plan().title")
+          small(data-bind="if: author().name") &nbsp;
+            | by 
+            span(data-bind="text:author().name")
+        p(data-bind="text:plan().description")
+      div.col-md-1
+        img(data-bind="attr:{'src': plan().images[0].small }", style="width:100px", src=plan.images[0].small)
+
+  div.row
+    div.col-md-3
+      div.list-group(data-bind="template:{name:'place-group-item-template', foreach:plan().places}")
+    div.col-md-9
+
+  script(type="text/html",id="place-group-item-template")
+    a.list-group-item(href="#")
+      h4.list-group-item-heading(data-bind="text:name")
+      p.list-group-item-text(data-bind="text:$root.stayDates($data, 'short')")
+      span.badge(data-bind="text:$data.days + ' night(s)'")
+      p.list-group-item-text(data-bind="text:description")
+
+block scripts
+  script(src="/js/knockout-min.js")
+  script(src="/js/date-utils.min.js")
+  script(src="/js/tphq.js")
+  script
+    TPHQ.initPlanDetail('plan.json');
