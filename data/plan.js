@@ -10,7 +10,17 @@ exports.getPlan = function (id, success) {
       console.log('Error: ' + err);
       return;
     }
-
     success(JSON.parse(data));
   });
+  exports.urlFor = function (plan) {
+    var toLowerize = function (s) {
+      var result = s.toLowerCase();
+      return result.replace(/[^a-z0-9]+/g, '-');
+    }
+    var url = "/plans/";
+    url += toLowerize(plan.author.name) + '/';
+    url += plan.id + '/';
+    url += toLowerize(plan.plan.title) + '/';
+    return url;
+  }
 }

@@ -28,7 +28,6 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-console.log(routes);
 app.get('/', routes.index);
 app.get('/plans/:userName/:planID/[^/]+/', routes.detailView);
 app.get('/plans/:userName/:planID/[^/]+/plan.json', routes.detailJson);
