@@ -30,8 +30,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.js" />
-    <Compile Include="routes\index.js" />
-    <Compile Include="routes\user.js" />
+    <Content Include="config\routes.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="config\settings.js">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="data\plan.js">
       <SubType>Content</SubType>
     </Content>
@@ -85,6 +89,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="README.md" />
+    <Content Include="test.js">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="views\detail-view.jade">
       <SubType>Content</SubType>
     </Content>
@@ -97,11 +104,11 @@
   <ItemGroup>
     <Folder Include="data" />
     <Folder Include="data\plans" />
+    <Folder Include="config" />
     <Folder Include="public\" />
     <Folder Include="public\js\" />
     <Folder Include="public\css\" />
     <Folder Include="public\fonts\" />
-    <Folder Include="routes\" />
     <Folder Include="views\" />
     <Folder Include="views\partials" />
   </ItemGroup>

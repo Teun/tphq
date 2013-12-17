@@ -1,7 +1,4 @@
 var plans = require('../data/plan');
-/*
- * GET home page.
- */
 
 exports.index = function(req, res){
   res.render('index', { title: 'Welcome to travelplanHQ' });
@@ -22,3 +19,8 @@ exports.detailView = function (req, res) {
 exports.detailJson = function (req, res) {
   plans.getPlan(req.params.planID, function (d) { res.json(d); });
 };
+exports.init = function (app) {
+  app.get('/', exports.index);
+  app.get('/plans/:userName/:planID/[^/]+/', exports.detailView);
+  app.get('/plans/:userName/:planID/[^/]+/plan.json', exports.detailJson);
+}
