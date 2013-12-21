@@ -5,30 +5,78 @@
     "title": "Thailand, temples and cities",
     "startDate": 1391212800000,
     "places":[
+
       {
+        "id":"7",
+        "type":"travel",
+        "mode": "plane",
+        "description": ""
+      },
+      {
+        "id":"8",
+        "type":"place",
+        "name": "Hua Hin, Thailand",
+        "description":"",
+        "sights":[],
+        "latlng":[12.57065,99.95876],
+        "fromDay": 0,
+        "days": 2
+      },
+      {
+        "id":"6",
+        "type":"travel",
+        "mode": "car",
+        "description": ""
+      },
+      {
+        "id":"1",
+        "type":"place",
         "name": "Bangkok, Thailand",
         "description":"Short description of the place",
         "sights":[],
         "latlng":[13.803611,100.6075],
-        "fromDay": 0,
+        "fromDay": 3,
         "days": 3
       },
       {
+        "id":"4",
+        "type":"travel",
+        "mode": "car",
+        "description": ""
+      },
+      {
+        "id":"2",
+        "type":"place",
         "name": "Chiang Mai, Thailand",
         "description":"Short description of the place",
         "sights":[],
         "latlng":[18.781752,98.95559],
-        "fromDay": 3,
+        "fromDay": 5,
         "days": 1
       },
       {
+        "id":"5",
+        "type":"travel",
+        "mode": "car",
+        "description": ""
+      },
+      {
+        "id":"3",
+        "type":"place",
         "name": "Angkor Wat, Cambodja",
         "description":"Short description of the place",
         "sights":[],
         "latlng":[13.4256,103.86],
-        "fromDay": 4,
+        "fromDay": 6,
         "days": 1
-      }
+      },
+			{
+				"id":"7",
+				"type":"travel",
+				"mode": "plane",
+				"description": ""
+			}
+
     ],
     "images":[
       {

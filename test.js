@@ -2,7 +2,7 @@
 var expect = require("expect.js");
 var express = require('express');
 var app = express();
-var config = require("./config/settings");
+var config = require("./config");
 var routes = require("./config/routes");
 config.appCfg(app);
 routes.init(app);
