@@ -1,12 +1,52 @@
 /*
   
  */
-
+'use strict'
 var TPHQ = (function()
 {
   var scope = {};
+  var extendPlaces = function (places) {
+    if (!places) return;
+    places.byId = function (id) {
+      for (var i = 0; i < places.length; i++) {
+        if (places[i].id == id) return places[i];
+      }
+      return null;
+    }
+    var extendPlace = function (place) {
+      place.selected = ko.observable(false);
+      place.select = function (val, exclusive) {
+        if (exclusive) {
+          for (var i = 0; i < places.length; i++) {
+            places[i].select(false, false);
+          }
+        }
+        if (val != place.selected()) place.selected(val);
+        if (exclusive && val) {
+          onSelect();
+        }
+      }
+      var handlers = [];
+      place.addSelectHandler = function (h) {
+        handlers.push(h);
+      }
+      var onSelect = function () {
+        for (var i = 0; i < handlers.length; i++) {
+          handlers[i](place);
+        }
+      }
+    }
+    for (var i = 0; i < places.length; i++) {
+      extendPlace(places[i]);
+    }
+
+  }
   var PlanModel = function(data){
     var self = this;
+    // some extending
+    extendPlaces(data.plan.places);
+    
+
     self.plan = ko.observable(data.plan);
     self.author = ko.observable(data.author);
     
@@ -45,9 +85,15 @@ var TPHQ = (function()
           var latlng = place.latlng;
           placeNr++;
           var marker = L.marker(latlng, { icon: L.divIcon({html: placeNr, iconSize:15})}).addTo(scope.map);
-          var popup = marker.bindPopup("<h2>" + place.name + " (" + self.stayDates(place) + ")</h2>" + place.description).openPopup();
+          var popup = marker.bindPopup("<h2>" + place.name + " (" + self.stayDates(place) + ")</h2>" + place.description);
           scope.mapItems.markers.push(marker);
           poly.push(latlng);
+          var funcToCreateScope = function (m) {
+            place.addSelectHandler(function (p) {
+              m.openPopup();
+            });
+          };
+          funcToCreateScope(marker);
         }
       }
       scope.mapItems.polyline = L.polyline(poly).addTo(scope.map);
@@ -68,15 +114,15 @@ var TPHQ = (function()
       scope.map.fitBounds(bounds, { padding: [100, 100]});
     }
   }
-  scope.initPlanDetail = function(url){
+  var commonInitDetail = function (url, afterBind) {
     $.getJSON(url)
       .done(function (data) {
         scope.model = new PlanModel(data);
         ko.applyBindings(scope.model);
-        scope.model.initMap();
+        afterBind();
       })
-      .fail(function(a,r,g) {
-        alert( "error: " + g );
+      .fail(function (a, r, g) {
+        alert("error: " + g);
       });
     $('.share-facebook').click(function () {
       var shareUrl = 'http://www.facebook.com/sharer/sharer.php?s=100&p[url]=' + document.location.href + '&p[images][0]=' + scope.model.plan().images[0].large + '&p[title]=' + document.title + '&p[summary]=Check out my travel plan';
@@ -86,12 +132,39 @@ var TPHQ = (function()
     $('.plan-detail').show();
     scope.map = L.mapbox.map('map', 'teun.gjiilado');
   }
-  scope.highlight = function (id) {
-    var plan = scope.model.plan().places;
-    alert(id);
-
+  scope.initPlanDetail = function (url) {
+    wireDetailButtons('map');
+    commonInitDetail(url, function () {
+      scope.model.initMap();
+    });
   }
-  scope.mapItems = {markers:[]};
+  scope.initPlanEdit = function (url) {
+    wireDetailButtons('edit');
+    commonInitEdit(url, function () {
+    });
+  }
+  var wireDetailButtons = function (current) {
+    var wire = function (btn, isCurrent, to) {
+      if (isCurrent) {
+        btn.addClass('btn-primary');
+      } else {
+        btn.click(function () { window.location.href = to; })
+      }
+    };
+    wire($('#btn-map'), current == 'map', './');
+    wire($('#btn-list'), current == 'list', './list');
+    wire($('#btn-edit'), current == 'edit', './edit');
+  }
+  scope.select = function (id) {
+    var plan = scope.model.plan().places.byId(id);
+    if (plan) plan.select(true, true);
+  }
+  scope.mapItems = { markers: [] };
+
+  scope.__planmodel = PlanModel;
   return scope;
+
+  //
 }
 )();
+//if (module) module.exports.TPHQ = TPHQ;

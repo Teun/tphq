@@ -1,11 +1,13 @@
 var plans = require('../data/plan');
 
-exports.index = function(req, res){
-  res.render('index', { title: 'Welcome to travelplanHQ' });
+exports.index = function (req, res) {
+  plans.getSome(function (some) {
+    res.render('index', { title: 'Welcome to travelplanHQ', suggestions:some });
+  });
 };
-exports.detailView = function (req, res) {
+var renderForPlan = function (req, res, urlAppend, todo) {
   plans.getPlan(req.params.planID, function (p) {
-    var canonUrl = plans.urlFor(p);
+    var canonUrl = plans.urlFor(p, urlAppend);
     if (canonUrl != req.url) {
       console.log(canonUrl);
       console.log(req.url);
@@ -13,14 +15,21 @@ exports.detailView = function (req, res) {
       return;
     }
     p.title = 'Travelplan: ' + p.plan.title;
-    res.render('detail-view', p);
+    todo(p);
   });
+}
+exports.detailEdit = function (req, res) {
+  renderForPlan(req, res, 'edit', function (model) { res.render('detail-edit', model); });
+};
+exports.detailView = function (req, res) {
+  renderForPlan(req, res, '', function (model) { res.render('detail-view', model); });
 };
 exports.detailJson = function (req, res) {
   plans.getPlan(req.params.planID, function (d) { res.json(d); });
 };
 exports.init = function (app) {
   app.get('/', exports.index);
-  app.get('/plans/:userName/:planID/[^/]+/', exports.detailView);
-  app.get('/plans/:userName/:planID/[^/]+/plan.json', exports.detailJson);
+  app.get('/itinerary/:userName/:planID/[^/]+/', exports.detailView);
+  app.get('/itinerary/:userName/:planID/[^/]+/edit', exports.detailEdit);
+  app.get('/itinerary/:userName/:planID/[^/]+/plan.json', exports.detailJson);
 }

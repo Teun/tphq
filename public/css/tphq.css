@@ -18,6 +18,9 @@ nav.navbar-default {
 a.list-group-item:hover {
   background-color:#cad8db ;
 }
+a.list-group-item>.badge-container {
+  float:right;
+}
 a.list-group-item.travel-item:hover {
   background-color:#fff;
 }

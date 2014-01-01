@@ -1,0 +1,52 @@
+﻿extends ../layout
+
+block meta
+  meta(property="og:image", content=plan.images[0].large)
+  meta(name="description" content="Create and share your travel intineraries. Before, during and afterwards.")
+  meta(name="og:description" content="Create and share your travel intineraries. Before, during and afterwards.")
+
+block content
+  div.page-header
+    div.row
+      div.col-md-10
+        h1
+          span(data-bind="text:plan().title")
+          small(data-bind="if: author().name") &nbsp;
+            | by 
+            span(data-bind="text:author().name")
+        p(data-bind="text:plan().description")
+      div.col-md-2
+        img(data-bind="attr:{'src': plan().images[0].small }", style="width:100px;", src=plan.images[0].small)
+        div.btn-group
+          button.btn#btn-map(type='button') map
+          button.btn#btn-list(type='button') list
+          button.btn#btn-edit(type='button') edit
+
+  div.row
+    div.col-md-3
+      div.list-group(data-bind="template:{name:selectPlaceTemplate, foreach:plan().places}")
+    div.col-md-9
+      block central
+
+  script(type="text/html",id="place-group-item-template")
+    a.list-group-item(href="#", data-bind="attr:{onclick:'TPHQ.select(' + $data.id + ')', class:$data.selected() ? 'list-group-item active' : 'list-group-item'}")
+      h4.list-group-item-heading(data-bind="text:name")
+      span.badge-container night(s):
+        span.badge(data-bind="text:$data.days")
+      p.list-group-item-text(data-bind="text:$root.stayDates($data, 'short')")
+      p.list-group-item-text(data-bind="text:description")
+  script(type="text/html",id="travel-group-item-template")
+    a.list-group-item.travel-item(href="#")
+      span.travel-glyph
+        span(data-bind="attr:{class: $root.classFor($data)}")
+  script(type="text/html",id="place-popup-template")
+    h2(data-bind="text:name")
+    p(data-bind="text:description")
+
+block scripts
+  script(src="/js/knockout-min.js")
+  script(src="/js/date-utils.min.js")
+  script(src="/js/tphq.js")
+  script(src='//api.tiles.mapbox.com/mapbox.js/v1.5.0/mapbox.js')
+  link(href='//api.tiles.mapbox.com/mapbox.js/v1.5.0/mapbox.css', rel='stylesheet')
+block initScript

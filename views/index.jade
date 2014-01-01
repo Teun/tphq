@@ -1,23 +1,27 @@
 extends layout
 
+mixin thumb(plan)
+    a.thumbnail(href='/itinerary/x/' + plan.id + '/x/')
+      img(src=plan.plan.images[0].small, style="height:200px; overflow-x:clip")
+      div.caption 
+        h4= plan.plan.title
+        small= 'by ' + plan.author.name
+        p=plan.plan.description
+
+
 block content
   div.page-header
     h1= title
-
-  div.col-md-3
-    h4 Sample
-    p  
-      a(href="plans/teun/dw2wtz/thailand-temples-cities/") Check out our sample plan
-    p  
-      a(href="plans/teun-duynstee/wy2ore/culture-and-nature-in-former-yugoslavia/") or this one
-
 
   div.col-md-3
     h4 Plan, share
     p
       | travelplanHQ will soon allow you to add your own plans, share them through social media, clone plans from other users and 
       | customize them to your needs
-
-  div.col-md-3
-    h4 Alpha
     p travelplanHQ is in early alpha status. No signups are possible yet.
+
+  div.col-md-2
+    +thumb(suggestions[0])
+
+  div.col-md-2
+    +thumb(suggestions[1])
