@@ -95,11 +95,17 @@
     <Content Include="test.js">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="views\detail-edit.jade">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="views\detail-view.jade">
       <SubType>Content</SubType>
     </Content>
     <Content Include="views\index.jade" />
     <Content Include="views\layout.jade" />
+    <Content Include="views\partials\detail-layout.jade">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="views\partials\navbar.jade">
       <SubType>Content</SubType>
     </Content>

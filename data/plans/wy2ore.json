@@ -64,6 +64,12 @@
         "days": 1
       },
       {
+        "id":"6",
+        "type":"travel",
+        "mode": "car",
+        "description": ""
+      },
+      {
         "id":"8",
         "type":"place",
         "name": "Pula, Croatia",

@@ -9,7 +9,7 @@ var TPHQ = (function()
     if (!places) return;
     places.byId = function (id) {
       for (var i = 0; i < places.length; i++) {
-        if (places[i].id == id) return places[i];
+        if (places[i].id() == id) return places[i];
       }
       return null;
     }
@@ -23,14 +23,16 @@ var TPHQ = (function()
         }
         if (val != place.selected()) place.selected(val);
         if (exclusive && val) {
-          onSelect();
+          onSelect(place);
         }
       }
       var handlers = [];
       place.addSelectHandler = function (h) {
         handlers.push(h);
       }
-      var onSelect = function () {
+      var onSelect = function (p) {
+        scope.model.selectedPlace(p);
+
         for (var i = 0; i < handlers.length; i++) {
           handlers[i](place);
         }
@@ -44,19 +46,22 @@ var TPHQ = (function()
   var PlanModel = function(data){
     var self = this;
     // some extending
-    extendPlaces(data.plan.places);
     
 
-    self.plan = ko.observable(data.plan);
-    self.author = ko.observable(data.author);
+    self.plan = ko.mapping.fromJS(data.plan);
+    extendPlaces(self.plan.places());
+
+    self.author = ko.mapping.fromJS(data.author);
+
+    self.selectedPlace = ko.observable(null);
     
     self.stayDates = function(place, style){ 
-      var startDate = new Date(self.plan().startDate);
-      startDate.addDays(place.fromDay);
+      var startDate = new Date(self.plan.startDate());
+      startDate.addDays(place.fromDay());
       return startDate.toFormat("D MMM YYYY");
     }
     self.selectPlaceTemplate = function (d) {
-      switch (d.type) {
+      switch (d.type()) {
         case "place":
           return "place-group-item-template";
         case "travel":
@@ -64,7 +69,7 @@ var TPHQ = (function()
       }
     }
     self.classFor = function (d) {
-      switch (d.mode) {
+      switch (d.mode()) {
         case "car":
           return "glyphicon glyphicon-road";
         case "plane":
@@ -76,16 +81,17 @@ var TPHQ = (function()
       }
     }
     self.initMap = function () {
-      var plan = self.plan();
+      scope.map = L.mapbox.map('map', 'teun.gjiilado');
+      var plan = self.plan;
       var poly = [];
       var placeNr = 0;
-      for (var i = 0; i < plan.places.length; i++) {
-        var place = plan.places[i];
+      for (var i = 0; i < plan.places().length; i++) {
+        var place = plan.places()[i];
         if (place.latlng) {
-          var latlng = place.latlng;
+          var latlng = place.latlng();
           placeNr++;
           var marker = L.marker(latlng, { icon: L.divIcon({html: placeNr, iconSize:15})}).addTo(scope.map);
-          var popup = marker.bindPopup("<h2>" + place.name + " (" + self.stayDates(place) + ")</h2>" + place.description);
+          var popup = marker.bindPopup("<h2>" + place.name() + " (" + self.stayDates(place) + ")</h2>" + place.description());
           scope.mapItems.markers.push(marker);
           poly.push(latlng);
           var funcToCreateScope = function (m) {
@@ -99,19 +105,21 @@ var TPHQ = (function()
       scope.mapItems.polyline = L.polyline(poly).addTo(scope.map);
       self.fitAllOnMap();
     }
+    self.initEditor = function () {
+    }
     self.fitAllOnMap = function () {
       var bounds = null;
-      var plan = self.plan();
-      for (var i = 0; i < plan.places.length; i++) {
-        var place = plan.places[i];
-        if (place.type != 'place') continue;
+      var plan = self.plan;
+      for (var i = 0; i < plan.places().length; i++) {
+        var place = plan.places()[i]; 
+        if (place.type() != 'place') continue;
         if (bounds == null) {
-          bounds = L.latLngBounds(L.latLng(place.latlng[0], place.latlng[1]), L.latLng(place.latlng[0], place.latlng[1]));
+          bounds = L.latLngBounds(L.latLng(place.latlng()[0], place.latlng()[1]), L.latLng(place.latlng()[0], place.latlng()[1]));
         } else {
-          bounds.extend(L.latLng(place.latlng[0], place.latlng[1]));
+          bounds.extend(L.latLng(place.latlng()[0], place.latlng()[1]));
         }
       }
-      scope.map.fitBounds(bounds, { padding: [100, 100]});
+      scope.map.fitBounds(bounds, { padding: [200, 200]});
     }
   }
   var commonInitDetail = function (url, afterBind) {
@@ -130,7 +138,6 @@ var TPHQ = (function()
       return false;
     });
     $('.plan-detail').show();
-    scope.map = L.mapbox.map('map', 'teun.gjiilado');
   }
   scope.initPlanDetail = function (url) {
     wireDetailButtons('map');
@@ -140,7 +147,33 @@ var TPHQ = (function()
   }
   scope.initPlanEdit = function (url) {
     wireDetailButtons('edit');
-    commonInitEdit(url, function () {
+    var selectedLocation = null;
+    $('#lookup-entry').typeahead(
+      {
+        name: 'locations',
+        valueKey:'name',
+        remote: {
+          url: '/location.json?action=SITEWIDECOMBINEDV2&global=true&startTime=1385665732480&action=SITEWIDECOMBINEDV2&global=true&startTime=' + new Date().getTime() + '&query=%QUERY',
+          filter: function (hits) {
+            var result = [];
+            for (var i = 0; i < hits.length; i++) {
+              if (hits[i].type == 'GEO') result.push(hits[i]);
+            }
+            return result;
+          },
+        },
+        template: function (d) {
+          return d.name + ', ' + d.geo_name;
+        }
+
+      }).on('typeahead:selected', function (ev, d) { selectedLocation = d; });
+    $('#btn-select-location').click(function () {
+      var selected = scope.model.selectedPlace();
+      selected.name(selectedLocation.name + ", " + selectedLocation.geo_name);
+      var ix = selectedLocation.coords.indexOf(",");
+      selected.latlng([parseFloat(selectedLocation.coords.substr(0, ix)), parseFloat(selectedLocation.coords.substr(ix + 1))]);
+    })
+    commonInitDetail(url, function () {
     });
   }
   var wireDetailButtons = function (current) {
@@ -156,7 +189,7 @@ var TPHQ = (function()
     wire($('#btn-edit'), current == 'edit', './edit');
   }
   scope.select = function (id) {
-    var plan = scope.model.plan().places.byId(id);
+    var plan = scope.model.plan.places().byId(id);
     if (plan) plan.select(true, true);
   }
   scope.mapItems = { markers: [] };

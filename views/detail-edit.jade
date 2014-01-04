@@ -1,7 +1,40 @@
 ﻿extends partials/detail-layout
 
 block central
-  p content here
+  div(data-bind="if:selectedPlace")
+    div.well.well-lg(data-bind="with:selectedPlace")
+      div#editor
+        table.table
+          tr
+            td Location
+            td
+              input(data-bind="value:name")
+              span &nbsp;
+              button.btn.btn-info#btn-lookup(data-target="#location-lookup-modal", data-toggle="modal") ...
+          tr
+            td Number of nights
+            td
+              input(data-bind="value:days")
+          tr
+            td Geo location
+            td
+              input(data-bind="value:latlng()[0]")
+              input(data-bind="value:latlng()[1]")
+          tr
+            td
+            td 
+              button.btn.btn-primary#btn-done Done
+  div.modal.fade#location-lookup-modal
+    div.modal-dialog
+      div.modal-content
+        div.modal-header
+          button.close(type="button", data-dismiss="modal", aria-hidden="true") &times;
+          h4.modal-title Select a known location
+        div.modal-body
+          input#lookup-entry
+        div.modal-footer
+          button.btn.btn-default(type="button", data-dismiss="modal") Close
+          button.btn.btn-primary#btn-select-location(type="button", data-dismiss="modal") Save changes
 
 block initScript
   script.

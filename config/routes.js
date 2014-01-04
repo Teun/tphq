@@ -1,4 +1,5 @@
 var plans = require('../data/plan');
+var request = require('request');
 
 exports.index = function (req, res) {
   plans.getSome(function (some) {
@@ -27,9 +28,14 @@ exports.detailView = function (req, res) {
 exports.detailJson = function (req, res) {
   plans.getPlan(req.params.planID, function (d) { res.json(d); });
 };
+exports.locationJson = function (req, res) {
+  var newUrl = "http://www.tripadvisor.com/TypeAheadJson" + req._parsedUrl.search;
+  request(newUrl).pipe(res);
+}
 exports.init = function (app) {
   app.get('/', exports.index);
   app.get('/itinerary/:userName/:planID/[^/]+/', exports.detailView);
   app.get('/itinerary/:userName/:planID/[^/]+/edit', exports.detailEdit);
   app.get('/itinerary/:userName/:planID/[^/]+/plan.json', exports.detailJson);
+  app.get('/location.json', exports.locationJson);
 }
