@@ -1,6 +1,20 @@
 ﻿extends partials/detail-layout
 
 block central
+  div(data-bind="if: !selectedPlace()")
+    div.well.well-lg
+      div#editor
+        table.table
+          tr
+            td Title
+            td
+              input(data-bind="value:plan.title()")
+          tr
+            td Long description
+            td
+              textarea(data-bind="value:plan.description()")
+
+
   div(data-bind="if:selectedPlace")
     div.well.well-lg(data-bind="with:selectedPlace")
       div#editor
@@ -23,7 +37,9 @@ block central
           tr
             td
             td 
-              button.btn.btn-primary#btn-done Done
+              button.btn.btn-primary#btn-done(onclick="TPHQ.select(null);") Done
+
+
   div.modal.fade#location-lookup-modal
     div.modal-dialog
       div.modal-content
@@ -35,6 +51,8 @@ block central
         div.modal-footer
           button.btn.btn-default(type="button", data-dismiss="modal") Close
           button.btn.btn-primary#btn-select-location(type="button", data-dismiss="modal") Save changes
+  div 
+    button.btn.btn-primary#btn-save-plan Save plan
 
 block initScript
   script.

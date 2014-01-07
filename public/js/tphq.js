@@ -49,6 +49,8 @@ var TPHQ = (function()
     
 
     self.plan = ko.mapping.fromJS(data.plan);
+    self.plan.title = self.plan.title || ko.observable("");
+    self.plan.description = self.plan.description || ko.observable("");
     extendPlaces(self.plan.places());
 
     self.author = ko.mapping.fromJS(data.author);
@@ -172,6 +174,8 @@ var TPHQ = (function()
       selected.name(selectedLocation.name + ", " + selectedLocation.geo_name);
       var ix = selectedLocation.coords.indexOf(",");
       selected.latlng([parseFloat(selectedLocation.coords.substr(0, ix)), parseFloat(selectedLocation.coords.substr(ix + 1))]);
+      if (!selected.lookupMeta) selected.lookupMeta = ko.observable();
+      selected.lookupMeta({src:'tripadvisor', url:selectedLocation.url, id:selectedLocation.value});
     })
     commonInitDetail(url, function () {
     });
@@ -189,6 +193,10 @@ var TPHQ = (function()
     wire($('#btn-edit'), current == 'edit', './edit');
   }
   scope.select = function (id) {
+    if (id == null) {
+      scope.model.selectedPlace(null);
+      return;
+    }
     var plan = scope.model.plan.places().byId(id);
     if (plan) plan.select(true, true);
   }

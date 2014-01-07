@@ -8,6 +8,7 @@ exports.index = function (req, res) {
 };
 var renderForPlan = function (req, res, urlAppend, todo) {
   plans.getPlan(req.params.planID, function (p) {
+    console.log(p);
     var canonUrl = plans.urlFor(p, urlAppend);
     if (canonUrl != req.url) {
       console.log(canonUrl);
