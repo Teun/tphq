@@ -1,7 +1,7 @@
 ﻿extends ../layout
 
 block meta
-  meta(property="og:image", content=plan.images[0].large)
+  meta(property="og:image", content=model.plan.images[0].large)
   meta(name="description" content="Create and share your travel intineraries. Before, during and afterwards.")
   meta(name="og:description" content="Create and share your travel intineraries. Before, during and afterwards.")
 
@@ -16,7 +16,7 @@ block content
             span(data-bind="text:author.name")
         p(data-bind="text:plan.description")
       div.col-md-2
-        img(data-bind="attr:{'src': plan.images()[0].small }", style="width:100px;", src=plan.images[0].small)
+        //img(data-bind="attr:{'src': plan.images()[0].small }", style="width:100px;", src=model.plan.images[0].small)
         div.btn-group
           button.btn#btn-map(type='button') map
           button.btn#btn-list(type='button') list

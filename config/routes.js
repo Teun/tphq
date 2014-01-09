@@ -3,7 +3,7 @@ var request = require('request');
 
 exports.index = function (req, res) {
   plans.getSome(function (some) {
-    res.render('index', { title: 'Welcome to travelplanHQ', suggestions:some });
+    res.render('index', { model: { title: 'Welcome to travelplanHQ', suggestions: some } });
   });
 };
 var renderForPlan = function (req, res, urlAppend, todo) {
@@ -11,8 +11,8 @@ var renderForPlan = function (req, res, urlAppend, todo) {
     console.log(p);
     var canonUrl = plans.urlFor(p, urlAppend);
     if (canonUrl != req.url) {
+      console.log(req.url + ' -> ');
       console.log(canonUrl);
-      console.log(req.url);
       res.redirect(canonUrl);
       return;
     }
@@ -21,10 +21,10 @@ var renderForPlan = function (req, res, urlAppend, todo) {
   });
 }
 exports.detailEdit = function (req, res) {
-  renderForPlan(req, res, 'edit', function (model) { res.render('detail-edit', model); });
+  renderForPlan(req, res, 'edit', function (model) {res.render('detail-edit', { model: model});});
 };
 exports.detailView = function (req, res) {
-  renderForPlan(req, res, '', function (model) { res.render('detail-view', model); });
+  renderForPlan(req, res, '', function (model) { res.render('detail-view', { model: model }); });
 };
 exports.detailJson = function (req, res) {
   plans.getPlan(req.params.planID, function (d) { res.json(d); });
