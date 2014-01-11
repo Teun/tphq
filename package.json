@@ -10,6 +10,7 @@
   "dependencies": {
     "express": "3.4.4",
     "jade": "*",
-    "stylus": "*"
+    "stylus": "*",
+    "async": "~0.2.9"
   }
 }
