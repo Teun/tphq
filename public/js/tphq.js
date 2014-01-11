@@ -47,10 +47,13 @@ var TPHQ = (function()
     var self = this;
     // some extending
     
-
+    self.id = data.id;
     self.plan = ko.mapping.fromJS(data.plan);
     self.plan.title = self.plan.title || ko.observable("");
-    self.plan.description = self.plan.description || ko.observable("");
+    self.plan.descriptionFormatted = ko.computed(function () {
+      var md = new Markdown.Converter();
+      return md.makeHtml(self.plan.description());
+    });
     extendPlaces(self.plan.places());
 
     self.author = ko.mapping.fromJS(data.author);
@@ -106,8 +109,6 @@ var TPHQ = (function()
       }
       scope.mapItems.polyline = L.polyline(poly).addTo(scope.map);
       self.fitAllOnMap();
-    }
-    self.initEditor = function () {
     }
     self.fitAllOnMap = function () {
       var bounds = null;
@@ -169,6 +170,19 @@ var TPHQ = (function()
         }
 
       }).on('typeahead:selected', function (ev, d) { selectedLocation = d; });
+    $('#btn-save-plan').click(function () {
+      var toPost = {
+        id: scope.model.id,
+        plan: ko.mapping.toJS(scope.model.plan),
+        author: ko.mapping.toJS(scope.model.author)
+      }
+      $.ajax({
+        url: url,
+        contentType: 'application/json',
+        type: 'POST',
+        data:JSON.stringify(toPost)
+      });
+    });
     $('#btn-select-location').click(function () {
       var selected = scope.model.selectedPlace();
       selected.name(selectedLocation.name + ", " + selectedLocation.geo_name);

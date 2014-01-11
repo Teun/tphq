@@ -29,6 +29,10 @@ exports.detailView = function (req, res) {
 exports.detailJson = function (req, res) {
   plans.getPlan(req.params.planID, function (d) { res.json(d); });
 };
+exports.updateDetailJson = function (req, res) {
+  plans.savePlan(req.params.planID, req.body);
+  res.json(true);
+};
 exports.locationJson = function (req, res) {
   var newUrl = "http://www.tripadvisor.com/TypeAheadJson" + req._parsedUrl.search;
   request(newUrl).pipe(res);
@@ -38,5 +42,6 @@ exports.init = function (app) {
   app.get('/itinerary/:userName/:planID/[^/]+/', exports.detailView);
   app.get('/itinerary/:userName/:planID/[^/]+/edit', exports.detailEdit);
   app.get('/itinerary/:userName/:planID/[^/]+/plan.json', exports.detailJson);
+  app.post('/itinerary/:userName/:planID/[^/]+/plan.json', exports.updateDetailJson);
   app.get('/location.json', exports.locationJson);
 }

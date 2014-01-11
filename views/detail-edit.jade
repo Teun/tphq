@@ -6,13 +6,15 @@ block central
       div#editor
         table.table
           tr
-            td Title
-            td
-              input(data-bind="value:plan.title()")
+            td.button-row(colspan=2) buttons here
           tr
-            td Long description
+            td.caption Title
+            td(colpan=2)
+              input.edit(data-bind="value:plan.title")
+          tr
+            td.caption Long description
             td
-              textarea(data-bind="value:plan.description()")
+              textarea.edit(data-bind="value:plan.description")
 
 
   div(data-bind="if:selectedPlace")

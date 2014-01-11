@@ -4,12 +4,18 @@ var folder = __dirname + '/plans/';
 
 var allPlans = null;
 var loadPlans = function (success) {
-  fs.readdir(folder, function(err, files){
-    async.map(files, loadPlan, function (err, results) { console.log('all files read'); success(results) });
+  fs.readdir(folder, function (err, files) {
+    async.map(files, loadPlan, function (err, results) {
+      var result = {};
+      for (var i = 0; i < results.length; i++) {
+        var plan = results[i];
+        result[plan.id] = plan;
+      }
+      success(result)
+    });
   });
 }
 var loadPlan = function (file, success) {
-  console.log('reading ' + file);
   fs.readFile(folder + file, 'utf8', function (err, data) {
     if (err) {
       console.log('Error: ' + err);
@@ -36,18 +42,27 @@ exports.existsPlan = function (id) {
 exports.getPlan = function (id, success) {
   whenPlansLoaded(function (all) {
     console.log("have the plans, looking for " + id);
-    for (var i = 0; i < all.length; i++) {
-      plan = all[i];
-      console.log("checking plan " + plan.id);
-      if (plan.id == id) {
-        console.log("found " + plan.id);
-        success(plan);
-        return;
-      }
+    if (id in all) {
+      success(all[id]);
+    } else {
+      success(null);
     }
-    success(null);
   });
 }
+exports.savePlan = function (id, plan) {
+  whenPlansLoaded(function (all) {
+    all[id] = plan;
+    var outputFilename = folder + id + ".json";
+    fs.writeFile(outputFilename, JSON.stringify(plan, null, 4), function (err) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("JSON saved to ");
+      }
+    });
+  });
+}
+
 exports.urlFor = function (plan, append) {
   var toLowerize = function (s) {
     var result = s.toLowerCase();

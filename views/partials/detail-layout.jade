@@ -14,9 +14,9 @@ block content
           small(data-bind="if: author.name") &nbsp;
             | by 
             span(data-bind="text:author.name")
-        p(data-bind="text:plan.description")
+        p(data-bind="html:plan.descriptionFormatted")
       div.col-md-2
-        //img(data-bind="attr:{'src': plan.images()[0].small }", style="width:100px;", src=model.plan.images[0].small)
+        img(data-bind="attr:{'src': plan.images()[0].small }", style="width:100px;", src=model.plan.images[0].small)
         div.btn-group
           button.btn#btn-map(type='button') map
           button.btn#btn-list(type='button') list
@@ -46,6 +46,7 @@ block content
 block scripts
   script(src="/js/knockout-min.js")
   script(src="/js/knockout.mapping-latest.js")
+  script(src="/js/Markdown.Converter.js")
   script(src="/js/date-utils.min.js")
   script(src="/js/tphq.js")
   script(src="/js/typeahead.min.js")
