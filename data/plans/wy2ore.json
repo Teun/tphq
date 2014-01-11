@@ -1,97 +1,118 @@
 {
-  "id":"wy2ore",
-  "plan":
-  {
-    "title": "Culture and nature in former Yugoslavia",
-    "startDate": 1346630400000,
-    "places":[
-      {
-        "id":"1",
-        "type":"place",
-        "name": "Ljubljana",
-        "description":"Short description of the place",
-        "sights":[],
-        "latlng":[46.05092,14.506431],
-        "fromDay": 0,
-        "days": 3
-      },
-      {
-        "id":"5",
-        "type":"travel",
-        "mode": "car",
-        "description": ""
-      },
-      {
-        "id":"2",
-        "type":"place",
-        "name": "Bled, Slovenia",
-        "description":"Short description of the place",
-        "sights":[],
-        "latlng":[46.36917,14.113181],
-        "fromDay": 3,
-        "days": 1
-      },
-      {
-        "id":"5",
-        "type":"travel",
-        "mode": "car",
-        "description": ""
-      },
-      {
-        "id":"3",
-        "type":"place",
-        "name": "Bovec, Slovenia",
-        "description":"Short description of the place",
-        "sights":[],
-        "latlng":[46.33814,13.552346],
-        "fromDay": 4,
-        "days": 1
-      },
-      {
-        "id":"5",
-        "type":"travel",
-        "mode": "car",
-        "description": ""
-      },
-      {
-        "id":"4",
-        "type":"place",
-        "name": "Divaca, Slovenia",
-        "description":"Near the Skocjan caves",
-        "sights":[],
-        "latlng":[45.683155,13.969222],
-        "fromDay": 5,
-        "days": 1
-      },
-      {
-        "id":"6",
-        "type":"travel",
-        "mode": "car",
-        "description": ""
-      },
-      {
-        "id":"8",
-        "type":"place",
-        "name": "Pula, Croatia",
-        "description":"",
-        "sights":[],
-        "latlng":[44.864227,13.854047],
-        "fromDay": 6,
-        "days": 2
-      }
-
-
-    ],
-    "images":[
-      {
-        "title": "Yugoslavia",
-        "large": "https://lh4.googleusercontent.com/--rN2SJma7Zc/UGwxgUSiTzI/AAAAAAAAHEY/3mIT5kes_xc/w401-h534-no/P1070908.JPG",
-        "small": "https://lh3.googleusercontent.com/9ooVKwt2bIhPkZZPZbAppegEYHtQuZll-noz0H2ivh0=w156-h207-p-no"
-      }
-    ]
-    
-  },
-  "author": {"name":"Teun Duynstee"},
-  "changelog":{}
-
+    "id": "wy2ore",
+    "plan": {
+        "title": "Culture and nature in former Yugoslavia",
+        "description": "hiuhiuiuh",
+        "startDate": 1346630400000,
+        "places": [
+            {
+                "id": "1",
+                "type": "place",
+                "name": "Ljubljana",
+                "description": "Short description of the place",
+                "sights": [],
+                "latlng": [
+                    46.05092,
+                    14.506431
+                ],
+                "fromDay": 0,
+                "days": 3,
+                "selected": false
+            },
+            {
+                "id": "5",
+                "type": "travel",
+                "mode": "car",
+                "description": "",
+                "selected": false
+            },
+            {
+                "id": "2",
+                "type": "place",
+                "name": "Bled, Slovenia",
+                "description": "Short description of the place",
+                "sights": [],
+                "latlng": [
+                    46.36917,
+                    14.113181
+                ],
+                "fromDay": 3,
+                "days": 1,
+                "selected": false
+            },
+            {
+                "id": "5",
+                "type": "travel",
+                "mode": "car",
+                "description": "",
+                "selected": false
+            },
+            {
+                "id": "3",
+                "type": "place",
+                "name": "Bovec, Slovenia",
+                "description": "Short description of the place",
+                "sights": [],
+                "latlng": [
+                    46.33814,
+                    13.552346
+                ],
+                "fromDay": 4,
+                "days": 1,
+                "selected": false
+            },
+            {
+                "id": "5",
+                "type": "travel",
+                "mode": "car",
+                "description": "",
+                "selected": false
+            },
+            {
+                "id": "4",
+                "type": "place",
+                "name": "Divaca, Slovenia",
+                "description": "Near the Skocjan caves",
+                "sights": [],
+                "latlng": [
+                    45.683155,
+                    13.969222
+                ],
+                "fromDay": 5,
+                "days": 1,
+                "selected": false
+            },
+            {
+                "id": "6",
+                "type": "travel",
+                "mode": "car",
+                "description": "",
+                "selected": false
+            },
+            {
+                "id": "8",
+                "type": "place",
+                "name": "Pula, Croatia",
+                "description": "",
+                "sights": [],
+                "latlng": [
+                    44.864227,
+                    13.854047
+                ],
+                "fromDay": 6,
+                "days": 2,
+                "selected": false
+            }
+        ],
+        "images": [
+            {
+                "title": "Yugoslavia",
+                "large": "https://lh4.googleusercontent.com/--rN2SJma7Zc/UGwxgUSiTzI/AAAAAAAAHEY/3mIT5kes_xc/w401-h534-no/P1070908.JPG",
+                "small": "https://lh3.googleusercontent.com/9ooVKwt2bIhPkZZPZbAppegEYHtQuZll-noz0H2ivh0=w156-h207-p-no"
+            }
+        ]
+    },
+    "author": {
+        "name": "Teun Duynstee"
+    }
 }

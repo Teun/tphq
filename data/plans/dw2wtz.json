@@ -1,93 +1,116 @@
 {
-  "id":"dw2wtz",
-  "plan":
-  {
-    "title": "Thailand, temples and cities",
-    "startDate": 1391212800000,
-    "places":[
-
-      {
-        "id":"7",
-        "type":"travel",
-        "mode": "plane",
-        "description": ""
-      },
-      {
-        "id":"8",
-        "type":"place",
-        "name": "Hua Hin, Thailand",
-        "description":"",
-        "sights":[],
-        "latlng":[12.57065,99.95876],
-        "fromDay": 0,
-        "days": 2
-      },
-      {
-        "id":"6",
-        "type":"travel",
-        "mode": "car",
-        "description": ""
-      },
-      {
-        "id":"1",
-        "type":"place",
-        "name": "Bangkok, Thailand",
-        "description":"Short description of the place",
-        "sights":[],
-        "latlng":[13.803611,100.6075],
-        "fromDay": 3,
-        "days": 3
-      },
-      {
-        "id":"4",
-        "type":"travel",
-        "mode": "car",
-        "description": ""
-      },
-      {
-        "id":"2",
-        "type":"place",
-        "name": "Chiang Mai, Thailand",
-        "description":"Short description of the place",
-        "sights":[],
-        "latlng":[18.781752,98.95559],
-        "fromDay": 5,
-        "days": 1
-      },
-      {
-        "id":"5",
-        "type":"travel",
-        "mode": "car",
-        "description": ""
-      },
-      {
-        "id":"3",
-        "type":"place",
-        "name": "Angkor Wat, Cambodja",
-        "description":"Short description of the place",
-        "sights":[],
-        "latlng":[13.4256,103.86],
-        "fromDay": 6,
-        "days": 1
-      },
-			{
-				"id":"7",
-				"type":"travel",
-				"mode": "plane",
-				"description": ""
-			}
-
-    ],
-    "images":[
-      {
-        "title": "Bangkok",
-        "large": "http://media-cdn.tripadvisor.com/media/photo-s/03/9b/2d/ad/bangkok.jpg",
-        "small": "http://media-cdn.tripadvisor.com/media/photo-l/03/9b/2d/ad/bangkok.jpg"
-      }
-    ]
-    
-  },
-  "author": {"name":"Teun Duynstee"},
-  "changelog":{}
-
+    "id": "dw2wtz",
+    "plan": {
+        "title": "Thailand, temples and cities (+Angkor Wat)",
+        "description": "A **four week** tour though the Thai highlights and a short sidestep to Angkor Wat (Cambodia)\n",
+        "startDate": 1391212800000,
+        "places": [
+            {
+                "id": "7",
+                "type": "travel",
+                "mode": "plane",
+                "description": "",
+                "selected": false
+            },
+            {
+                "id": "8",
+                "type": "place",
+                "name": "Ao Nang, Thailand, Asia",
+                "description": "",
+                "sights": [],
+                "latlng": [
+                    8.07582,
+                    98.83121
+                ],
+                "fromDay": 0,
+                "days": 2,
+                "selected": false,
+                "lookupMeta": {
+                    "src": "tripadvisor",
+                    "url": "/Tourism-g1507054-Ao_Nang_Krabi_Town_Krabi_Province-Vacations.html",
+                    "id": 1507054
+                }
+            },
+            {
+                "id": "6",
+                "type": "travel",
+                "mode": "car",
+                "description": "",
+                "selected": false
+            },
+            {
+                "id": "1",
+                "type": "place",
+                "name": "Bangkok, Thailand",
+                "description": "Short description of the place",
+                "sights": [],
+                "latlng": [
+                    13.803611,
+                    100.6075
+                ],
+                "fromDay": 3,
+                "days": 3,
+                "selected": false
+            },
+            {
+                "id": "4",
+                "type": "travel",
+                "mode": "car",
+                "description": "",
+                "selected": false
+            },
+            {
+                "id": "2",
+                "type": "place",
+                "name": "Chiang Mai, Thailand",
+                "description": "Short description of the place",
+                "sights": [],
+                "latlng": [
+                    18.781752,
+                    98.95559
+                ],
+                "fromDay": 5,
+                "days": 1,
+                "selected": false
+            },
+            {
+                "id": "5",
+                "type": "travel",
+                "mode": "car",
+                "description": "",
+                "selected": false
+            },
+            {
+                "id": "3",
+                "type": "place",
+                "name": "Angkor Wat, Cambodja",
+                "description": "Short description of the place",
+                "sights": [],
+                "latlng": [
+                    13.4256,
+                    103.86
+                ],
+                "fromDay": 6,
+                "days": 1,
+                "selected": false
+            },
+            {
+                "id": "7",
+                "type": "travel",
+                "mode": "plane",
+                "description": "",
+                "selected": false
+            }
+        ],
+        "images": [
+            {
+                "title": "Bangkok",
+                "large": "http://media-cdn.tripadvisor.com/media/photo-s/03/9b/2d/ad/bangkok.jpg",
+                "small": "http://media-cdn.tripadvisor.com/media/photo-l/03/9b/2d/ad/bangkok.jpg"
+            }
+        ]
+    },
+    "author": {
+        "name": "Teun Duynstee"
+    }
 }
