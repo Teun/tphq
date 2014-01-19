@@ -1,12 +1,16 @@
 ﻿extends partials/detail-layout
 
 block central
-  div(data-bind="if: !selectedPlace()")
+  div(data-bind="visible: !selectedPlace()")
     div.well.well-lg
       div#editor
         table.table
           tr
-            td.button-row(colspan=2) buttons here
+            td.button-row(colspan=2) 
+              button.btn#btn-add-place
+                span.glyphicon.glyphicon-plus
+              button.btn#btn-remove-plan
+                span.glyphicon.glyphicon-remove
           tr
             td.caption Title
             td(colpan=2)
@@ -17,10 +21,18 @@ block central
               textarea.edit(data-bind="value:plan.description")
 
 
-  div(data-bind="if:selectedPlace")
+  div(data-bind="visible:selectedPlace")
     div.well.well-lg(data-bind="with:selectedPlace")
       div#editor
         table.table
+          tr
+            td.button-row(colspan=2) 
+              button.btn#btn-remove-place(data-bind="click:$root.movePlaceUp")
+                span.glyphicon.glyphicon-chevron-up
+              button.btn#btn-remove-place(data-bind="click:$root.movePlaceDown")
+                span.glyphicon.glyphicon-chevron-down
+              button.btn#btn-remove-place(data-bind="click:$root.removePlace")
+                span.glyphicon.glyphicon-remove
           tr
             td Location
             td
@@ -28,14 +40,14 @@ block central
               span &nbsp;
               button.btn.btn-info#btn-lookup(data-target="#location-lookup-modal", data-toggle="modal") ...
           tr
-            td Number of nights
-            td
-              input(data-bind="value:days")
-          tr
             td Geo location
             td
               input(data-bind="value:latlng()[0]")
               input(data-bind="value:latlng()[1]")
+          tr
+            td Number of nights
+            td
+              input(data-bind="value:days")
           tr
             td
             td 

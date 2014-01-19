@@ -7,18 +7,12 @@ var TPHQ = (function()
   var scope = {};
   var extendPlaces = function (places) {
     if (!places) return;
-    places.byId = function (id) {
-      for (var i = 0; i < places.length; i++) {
-        if (places[i].id() == id) return places[i];
-      }
-      return null;
-    }
     var extendPlace = function (place) {
       place.selected = ko.observable(false);
       place.select = function (val, exclusive) {
         if (exclusive) {
-          for (var i = 0; i < places.length; i++) {
-            places[i].select(false, false);
+          for (var i = 0; i < places().length; i++) {
+            places()[i].select(false, false);
           }
         }
         if (val != place.selected()) place.selected(val);
@@ -37,13 +31,70 @@ var TPHQ = (function()
           handlers[i](place);
         }
       }
+      return place;
     }
-    for (var i = 0; i < places.length; i++) {
-      extendPlace(places[i]);
+    places.findId = function (id) {
+      for (var i = 0; i < places().length; i++) {
+        if (places()[i].id() == id) return i;
+      }
+      return -1;
     }
+    places.byId = function (id) {
+      var pos = places.findId(id);
+      if (pos >= 0) return places()[pos];
+      return null;
+    }
+    places.add = function () {
+      var last = scope.model.plan.places.pop();
+      var newTransport = {
+        id: newId(),
+        "type": "travel",
+        "mode": last.mode(),
+        "description": "",
+        selected: false
+      };
+      var newPlace = {
+        id: newId(),
+        "type": "place",
+        "name": "...",
+        "description": "",
+        "sights": [],
+        "latlng": [0, 0],
+        "fromDay": 0,
+        "days": 1,
+        selected: false
+      };
+      scope.model.plan.places.push(extendPlace(ko.mapping.fromJS(newTransport)));
+      scope.model.plan.places.push(extendPlace( ko.mapping.fromJS(newPlace)));
+      scope.model.plan.places.push(last);
+      scope.model.plan.places.byId(newPlace.id).select(true, true);
+    };
+    for (var i = 0; i < places().length; i++) {
+      extendPlace(places()[i]);
+    }
+    places.remove = function (id) {
+      var pos = places.findId(id);
+      if (pos >= 0) {
+        places.splice(pos - 1, 2);
+        scope.model.selectedPlace(null);
+      }
+    }
+    places.move = function (id, up) {
+      var pos = scope.model.plan.places.findId(id);
+      if (pos > 1 && up) {
+        var oldArray = scope.model.plan.places();
+        var tomove1 = oldArray[pos - 1];
+        var tomove2 = oldArray[pos];
+        oldArray[pos - 1] = oldArray[pos - 3];
+        oldArray[pos] = oldArray[pos - 2];
+        oldArray[pos - 3] = tomove1;
+        oldArray[pos - 2] = tomove2;
+        scope.model.plan.places(oldArray);
+      }
 
+    }
   }
-  var PlanModel = function(data){
+  var PlanModel = function (data) {
     var self = this;
     // some extending
     
@@ -54,7 +105,7 @@ var TPHQ = (function()
       var md = new Markdown.Converter();
       return md.makeHtml(self.plan.description());
     });
-    extendPlaces(self.plan.places());
+    extendPlaces(self.plan.places);
 
     self.author = ko.mapping.fromJS(data.author);
 
@@ -124,6 +175,15 @@ var TPHQ = (function()
       }
       scope.map.fitBounds(bounds, { padding: [200, 200]});
     }
+    self.removePlace = function (place) {
+      self.plan.places.remove(place.id());
+    }
+    self.movePlaceUp = function (place) {
+      self.plan.places.move(place.id(), true);
+    }
+    self.movePlaceDown = function (place) {
+      self.plan.places.move(place.id(), false);
+    }
   }
   var commonInitDetail = function (url, afterBind) {
     $.getJSON(url)
@@ -135,7 +195,7 @@ var TPHQ = (function()
       .fail(function (a, r, g) {
         alert("error: " + g);
       });
-    $('.share-facebook').click(function () {
+    $('.share-facebootstrapk').click(function () {
       var shareUrl = 'http://www.facebook.com/sharer/sharer.php?s=100&p[url]=' + document.location.href + '&p[images][0]=' + scope.model.plan().images[0].large + '&p[title]=' + document.title + '&p[summary]=Check out my travel plan';
       window.open(shareUrl, '_blank');
       return false;
@@ -191,9 +251,14 @@ var TPHQ = (function()
       if (!selected.lookupMeta) selected.lookupMeta = ko.observable();
       selected.lookupMeta({src:'tripadvisor', url:selectedLocation.url, id:selectedLocation.value});
     })
+    $('#btn-add-place').click(function () {
+      scope.model.plan.places.add();
+    });
     commonInitDetail(url, function () {
     });
   }
+  var nextId = (new Date()).getTime();
+  var newId = function () { return (nextId++).toString(); }
   var wireDetailButtons = function (current) {
     var wire = function (btn, isCurrent, to) {
       if (isCurrent) {
@@ -211,7 +276,7 @@ var TPHQ = (function()
       scope.model.selectedPlace(null);
       return;
     }
-    var plan = scope.model.plan.places().byId(id);
+    var plan = scope.model.plan.places.byId(id);
     if (plan) plan.select(true, true);
   }
   scope.mapItems = { markers: [] };
