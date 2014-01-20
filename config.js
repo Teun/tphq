@@ -1,9 +1,14 @@
 ﻿var express = require('express');
 var path = require('path');
 
-exports.appCfg = function (app) {
+var defaults = {};
+defaults.server = {
+  port: 3000
+};
 
-  app.set('port', process.env.PORT || 3000);
+defaults.appCfg = function (app, cfg) {
+
+  app.set('port', cfg.server.port);
   app.set('views', path.join(__dirname, './views'));
   app.set('view engine', 'jade');
   app.use(express.favicon());
@@ -22,3 +27,15 @@ exports.appCfg = function (app) {
 
 
 };
+
+var fs = require('fs');
+var extend = require('extend');
+
+extend(true, exports, defaults);
+
+var envConfigFile = process.argv.length > 2 ? process.argv[2] : '../env';
+if (fs.existsSync(envConfigFile + '.js')) {
+  var envConfig = require(envConfigFile);
+  console.log(envConfig);
+  extend(true, exports, envConfig);
+}

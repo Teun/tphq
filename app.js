@@ -11,7 +11,7 @@ var path = require('path');
 
 var app = express();
 
-config.appCfg(app);
+config.appCfg(app, config);
 routes.init(app);
 
 http.createServer(app).listen(app.get('port'), function(){
