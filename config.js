@@ -1,9 +1,13 @@
 ﻿var express = require('express');
 var path = require('path');
 
-exports.appCfg = function (app) {
+exports.server = {
+  port: 3000
+};
 
-  app.set('port', process.env.PORT || 3000);
+exports.appCfg = function (app, cfg) {
+
+  app.set('port', cfg.server.port);
   app.set('views', path.join(__dirname, './views'));
   app.set('view engine', 'jade');
   app.use(express.favicon());
