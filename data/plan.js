@@ -1,6 +1,7 @@
 ﻿var async = require('async');
+var cfg = require('../config');
 var fs = require('fs');
-var folder = __dirname + '/plans/';
+var folder = cfg.data.planPath || __dirname + '/plans/';
 
 var allPlans = null;
 var loadPlans = function (success) {
@@ -35,6 +36,7 @@ var whenPlansLoaded = function (success) {
     success(allPlans);
   }
 }
+
 
 exports.existsPlan = function (id) {
   return true;

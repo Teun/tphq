@@ -1,12 +1,19 @@
 ﻿var express = require('express');
 var path = require('path');
+var defaults = require('./config/settings');
+var fs = require('fs');
+var extend = require('extend');
 
-var defaults = {};
-defaults.server = {
-  port: 3000
-};
+extend(true, exports, defaults);
 
-defaults.appCfg = function (app, cfg) {
+var envConfigFile = process.argv.length > 2 ? process.argv[2] : '../env';
+if (fs.existsSync(envConfigFile + '.js')) {
+  var envConfig = require(envConfigFile);
+  console.log(envConfig);
+  extend(true, exports, envConfig);
+}
+
+exports.appCfg = function (app, cfg) {
 
   app.set('port', cfg.server.port);
   app.set('views', path.join(__dirname, './views'));
@@ -28,14 +35,3 @@ defaults.appCfg = function (app, cfg) {
 
 };
 
-var fs = require('fs');
-var extend = require('extend');
-
-extend(true, exports, defaults);
-
-var envConfigFile = process.argv.length > 2 ? process.argv[2] : '../env';
-if (fs.existsSync(envConfigFile + '.js')) {
-  var envConfig = require(envConfigFile);
-  console.log(envConfig);
-  extend(true, exports, envConfig);
-}
