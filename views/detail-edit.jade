@@ -66,7 +66,7 @@ block central
           button.btn.btn-default(type="button", data-dismiss="modal") Close
           button.btn.btn-primary#btn-select-location(type="button", data-dismiss="modal") Save changes
   div 
-    button.btn.btn-primary#btn-save-plan Save plan
+    button.btn#btn-save-plan(data-bind="attr:{'class': ($data.dirty() ? 'btn btn-primary' : 'btn disabled' )}", data-content="Saved", data-placement="right") Save plan
 
 block initScript
   script.
