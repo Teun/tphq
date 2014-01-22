@@ -116,12 +116,19 @@ var TPHQ = (function()
         plan: ko.mapping.toJS(self.plan),
         author: ko.mapping.toJS(self.author)
       }
+      for (var i = 0; i < obj.plan.places.length; i++) {
+        delete obj.plan.places[i].selected;
+      }
       return JSON.stringify(obj);
     }
     var oldValue = ko.observable(self.cleanJson());
     self.dirty = ko.computed(function () {
-      console.log("checking dirty");
+      var now = self.cleanJson();
       var d = self.cleanJson() != oldValue();
+      if (d) {
+        console.log(oldValue());
+        console.log(now);
+      }
       return d;
     });
     self.resetDirty = function () {
@@ -247,14 +254,20 @@ var TPHQ = (function()
         }
 
       }).on('typeahead:selected', function (ev, d) { selectedLocation = d; });
-    $('#btn-save-plan').click(function () {
+    $('#btn-save-plan').click(function (ev) {
       var toPost = scope.model.cleanJson();
       $.ajax({
         url: url,
         contentType: 'application/json',
         type: 'POST',
         data: toPost,
-        success: function () { scope.model.resetDirty(); }
+        success: function () {
+          scope.model.resetDirty();
+          $(ev.currentTarget).popover('show');
+          window.setTimeout(function(){$(ev.currentTarget).popover('hide');},2000);
+
+
+        }
       });
     });
     $('#btn-select-location').click(function () {
