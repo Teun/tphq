@@ -110,6 +110,23 @@ var TPHQ = (function()
     self.author = ko.mapping.fromJS(data.author);
 
     self.selectedPlace = ko.observable(null);
+    self.cleanJson = function () {
+      var obj = {
+        id: self.id,
+        plan: ko.mapping.toJS(self.plan),
+        author: ko.mapping.toJS(self.author)
+      }
+      return JSON.stringify(obj);
+    }
+    var oldValue = ko.observable(self.cleanJson());
+    self.dirty = ko.computed(function () {
+      console.log("checking dirty");
+      var d = self.cleanJson() != oldValue();
+      return d;
+    });
+    self.resetDirty = function () {
+      oldValue(self.cleanJson());
+    }
     
     self.stayDates = function(place, style){ 
       var startDate = new Date(self.plan.startDate());
@@ -231,16 +248,13 @@ var TPHQ = (function()
 
       }).on('typeahead:selected', function (ev, d) { selectedLocation = d; });
     $('#btn-save-plan').click(function () {
-      var toPost = {
-        id: scope.model.id,
-        plan: ko.mapping.toJS(scope.model.plan),
-        author: ko.mapping.toJS(scope.model.author)
-      }
+      var toPost = scope.model.cleanJson();
       $.ajax({
         url: url,
         contentType: 'application/json',
         type: 'POST',
-        data:JSON.stringify(toPost)
+        data: toPost,
+        success: function () { scope.model.resetDirty(); }
       });
     });
     $('#btn-select-location').click(function () {
