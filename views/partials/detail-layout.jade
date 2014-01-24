@@ -33,7 +33,7 @@ block content
       h4.list-group-item-heading(data-bind="text:name")
       span.badge-container night(s):
         span.badge(data-bind="text:$data.days")
-      p.list-group-item-text(data-bind="text:$root.stayDates($data, 'short')")
+      p.list-group-item-text(data-bind="text:formattedDate")
       p.list-group-item-text(data-bind="text:description")
   script(type="text/html",id="travel-group-item-template")
     a.list-group-item.travel-item(href="#")
