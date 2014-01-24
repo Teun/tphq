@@ -188,7 +188,7 @@ var TPHQ = (function()
           var latlng = place.latlng();
           placeNr++;
           var marker = L.marker(latlng, { icon: L.divIcon({html: placeNr, iconSize:15})}).addTo(scope.map);
-          var popup = marker.bindPopup("<h2>" + place.name() + " (" + self.stayDates(place) + ")</h2>" + place.description());
+          var popup = marker.bindPopup("<h2>" + place.name() + " (" + place.formattedDate() + ")</h2>" + place.description());
           scope.mapItems.markers.push(marker);
           poly.push(latlng);
           var funcToCreateScope = function (m) {
@@ -214,7 +214,7 @@ var TPHQ = (function()
           bounds.extend(L.latLng(place.latlng()[0], place.latlng()[1]));
         }
       }
-      scope.map.fitBounds(bounds, { padding: [200, 200]});
+      scope.map.fitBounds(bounds, { padding: [100, 100]});
     }
     self.removePlace = function (place) {
       self.plan.places.remove(place.id());
