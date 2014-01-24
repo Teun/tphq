@@ -75,6 +75,7 @@ var TPHQ = (function()
           id: newId(),
           "type": "place",
           "name": "...",
+          "lookupMeta": null,
           "description": "",
           "sights": [],
           "latlng": [0, 0],
