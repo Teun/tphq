@@ -5,94 +5,115 @@
 var TPHQ = (function()
 {
   var scope = {};
-  var extendPlaces = function (places) {
-    if (!places) return;
-    var extendPlace = function (place) {
-      place.selected = ko.observable(false);
-      place.select = function (val, exclusive) {
-        if (exclusive) {
-          for (var i = 0; i < places().length; i++) {
-            places()[i].select(false, false);
+  var extendPlan = function (plan) {
+    var extendPlaces = function (places) {
+      if (!places) return;
+      var extendPlace = function (place) {
+        place.selected = ko.observable(false);
+        place.select = function (val, exclusive) {
+          if (exclusive) {
+            for (var i = 0; i < places().length; i++) {
+              places()[i].select(false, false);
+            }
+          }
+          if (val != place.selected()) place.selected(val);
+          if (exclusive && val) {
+            onSelect(place);
           }
         }
-        if (val != place.selected()) place.selected(val);
-        if (exclusive && val) {
-          onSelect(place);
+        var handlers = [];
+        place.addSelectHandler = function (h) {
+          handlers.push(h);
         }
-      }
-      var handlers = [];
-      place.addSelectHandler = function (h) {
-        handlers.push(h);
-      }
-      var onSelect = function (p) {
-        scope.model.selectedPlace(p);
+        var onSelect = function (p) {
+          scope.model.selectedPlace(p);
 
-        for (var i = 0; i < handlers.length; i++) {
-          handlers[i](place);
+          for (var i = 0; i < handlers.length; i++) {
+            handlers[i](place);
+          }
         }
+        place.formattedDate = ko.computed(function () {
+          var startDateValue = plan.startDate();
+          if (startDateValue <= 0) {
+            return "unknown";
+          }
+          var startDate = new Date(startDateValue);
+          var extra = 0;
+          for (var i = 0; i < places().length; i++) {
+            var p = places()[i];
+            if (p.id() == place.id()) {
+              var newDate = startDate.add({ days: extra });
+              return newDate.toFormat("D MMM YYYY");
+            }
+            if(p.days)extra += Number(p.days());
+          }
+          return "-";
+        });
+        return place;
       }
-      return place;
-    }
-    places.findId = function (id) {
+      places.findId = function (id) {
+        for (var i = 0; i < places().length; i++) {
+          if (places()[i].id() == id) return i;
+        }
+        return -1;
+      }
+      places.byId = function (id) {
+        var pos = places.findId(id);
+        if (pos >= 0) return places()[pos];
+        return null;
+      }
+      places.add = function () {
+        var last = scope.model.plan.places.pop();
+        var newTransport = {
+          id: newId(),
+          "type": "travel",
+          "mode": last.mode(),
+          "description": "",
+          selected: false
+        };
+        var newPlace = {
+          id: newId(),
+          "type": "place",
+          "name": "...",
+          "description": "",
+          "sights": [],
+          "latlng": [0, 0],
+          "fromDay": 0,
+          "days": 1,
+          selected: false
+        };
+        scope.model.plan.places.push(extendPlace(ko.mapping.fromJS(newTransport)));
+        scope.model.plan.places.push(extendPlace(ko.mapping.fromJS(newPlace)));
+        scope.model.plan.places.push(last);
+        scope.model.plan.places.byId(newPlace.id).select(true, true);
+      };
       for (var i = 0; i < places().length; i++) {
-        if (places()[i].id() == id) return i;
+        extendPlace(places()[i]);
       }
-      return -1;
-    }
-    places.byId = function (id) {
-      var pos = places.findId(id);
-      if (pos >= 0) return places()[pos];
-      return null;
-    }
-    places.add = function () {
-      var last = scope.model.plan.places.pop();
-      var newTransport = {
-        id: newId(),
-        "type": "travel",
-        "mode": last.mode(),
-        "description": "",
-        selected: false
-      };
-      var newPlace = {
-        id: newId(),
-        "type": "place",
-        "name": "...",
-        "description": "",
-        "sights": [],
-        "latlng": [0, 0],
-        "fromDay": 0,
-        "days": 1,
-        selected: false
-      };
-      scope.model.plan.places.push(extendPlace(ko.mapping.fromJS(newTransport)));
-      scope.model.plan.places.push(extendPlace( ko.mapping.fromJS(newPlace)));
-      scope.model.plan.places.push(last);
-      scope.model.plan.places.byId(newPlace.id).select(true, true);
-    };
-    for (var i = 0; i < places().length; i++) {
-      extendPlace(places()[i]);
-    }
-    places.remove = function (id) {
-      var pos = places.findId(id);
-      if (pos >= 0) {
-        places.splice(pos - 1, 2);
-        scope.model.selectedPlace(null);
+      places.remove = function (id) {
+        var pos = places.findId(id);
+        if (pos >= 0) {
+          places.splice(pos - 1, 2);
+          scope.model.selectedPlace(null);
+        }
       }
-    }
-    places.move = function (id, up) {
-      var pos = scope.model.plan.places.findId(id);
-      if (pos > 1 && up) {
-        var oldArray = scope.model.plan.places();
-        var tomove1 = oldArray[pos - 1];
-        var tomove2 = oldArray[pos];
-        oldArray[pos - 1] = oldArray[pos - 3];
-        oldArray[pos] = oldArray[pos - 2];
-        oldArray[pos - 3] = tomove1;
-        oldArray[pos - 2] = tomove2;
-        scope.model.plan.places(oldArray);
-      }
+      places.move = function (id, up) {
+        var pos = scope.model.plan.places.findId(id);
+        if (pos > 1 && up) {
+          var oldArray = scope.model.plan.places();
+          var tomove1 = oldArray[pos - 1];
+          var tomove2 = oldArray[pos];
+          oldArray[pos - 1] = oldArray[pos - 3];
+          oldArray[pos] = oldArray[pos - 2];
+          oldArray[pos - 3] = tomove1;
+          oldArray[pos - 2] = tomove2;
+          scope.model.plan.places(oldArray);
+        }
 
+      }
     }
+    if (!plan) return null;
+    extendPlaces(plan.places);
   }
   var PlanModel = function (data) {
     var self = this;
@@ -105,7 +126,7 @@ var TPHQ = (function()
       var md = new Markdown.Converter();
       return md.makeHtml(self.plan.description());
     });
-    extendPlaces(self.plan.places);
+    extendPlan(self.plan);
 
     self.author = ko.mapping.fromJS(data.author);
 
@@ -118,6 +139,7 @@ var TPHQ = (function()
       }
       for (var i = 0; i < obj.plan.places.length; i++) {
         delete obj.plan.places[i].selected;
+        delete obj.plan.places[i].formattedDate;
       }
       return JSON.stringify(obj);
     }
@@ -135,11 +157,6 @@ var TPHQ = (function()
       oldValue(self.cleanJson());
     }
     
-    self.stayDates = function(place, style){ 
-      var startDate = new Date(self.plan.startDate());
-      startDate.addDays(place.fromDay());
-      return startDate.toFormat("D MMM YYYY");
-    }
     self.selectPlaceTemplate = function (d) {
       switch (d.type()) {
         case "place":
