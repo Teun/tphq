@@ -29,7 +29,7 @@ block content
       block central
 
   script(type="text/html",id="place-group-item-template")
-    a.list-group-item(href="#", data-bind="attr:{place: $data.id(), onclick:'TPHQ.select(' + $data.id() + ')', class:$data.selected() ? 'list-group-item active' : 'list-group-item'}")
+    a.list-group-item(data-bind="attr:{place: $data.id(), onclick:'TPHQ.select(' + $data.id() + ')', class:$data.selected() ? 'list-group-item active' : 'list-group-item'}")
       h4.list-group-item-heading(data-bind="text:name")
       span.badge-container night(s):
         span.badge(data-bind="text:$data.days")

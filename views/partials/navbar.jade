@@ -12,7 +12,7 @@
   div.collapse.navbar-collapse#tphq-main-nav-collapse
     ul.nav.navbar-nav
       li
-        a(href="#") Your plans
+        a(href="#", onclick="return false;", data-toggle="modal", data-target="#alpha-explainer") Your plans
       li.plan-detail
         a(href="#")
           span.glyphicon.glyphicon-plus-sign
@@ -26,3 +26,14 @@
         ul.dropdown-menu
           li
             a.share-facebook(href="#") Facebook
+
+div.modal.fade#alpha-explainer
+  div.modal-dialog
+    div.modal-content
+      div.modal-header
+        button.close(type="button", data-dismiss="modal", aria-hidden="true") &times;
+        h4.modal-title Sorry, feature not yet available
+      div.modal-body
+        | blablabla
+      div.modal-footer
+        button.btn.btn-default(type="button", data-dismiss="modal") Close
