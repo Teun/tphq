@@ -237,8 +237,8 @@ var TPHQ = (function()
       .fail(function (a, r, g) {
         alert("error: " + g);
       });
-    $('.share-facebootstrapk').click(function () {
-      var shareUrl = 'http://www.facebook.com/sharer/sharer.php?s=100&p[url]=' + document.location.href + '&p[images][0]=' + scope.model.plan().images[0].large + '&p[title]=' + document.title + '&p[summary]=Check out my travel plan';
+    $('.share-facebook').click(function () {
+      var shareUrl = 'http://www.facebook.com/sharer/sharer.php?s=100&p[url]=' + document.location.href + '&p[images][0]=' + scope.model.plan.images()[0].large() + '&p[title]=' + document.title + '&p[summary]=Check out my travel plan';
       window.open(shareUrl, '_blank');
       return false;
     });

@@ -12,13 +12,13 @@
   div.collapse.navbar-collapse#tphq-main-nav-collapse
     ul.nav.navbar-nav
       li
-        a(href="#") Your plans
+        a(href="#", onclick="return false;", data-toggle="modal", data-keyboard="true", data-target="#alpha-explainer") Your plans
       li.plan-detail
-        a(href="#")
+        a(href="#", onclick="return false;", data-toggle="modal", data-keyboard="true", data-target="#alpha-explainer")
           span.glyphicon.glyphicon-plus-sign
           | &nbsp;Fork this plan
       li.plan-detail
-        a(href="#")
+        a(href="#", onclick="return false;", data-toggle="modal", data-keyboard="true", data-target="#alpha-explainer")
           span.glyphicon.glyphicon-pushpin
           | &nbsp;Favorite
       li.dropdown.plan-detail
@@ -26,3 +26,15 @@
         ul.dropdown-menu
           li
             a.share-facebook(href="#") Facebook
+
+div.modal.fade#alpha-explainer(tabindex="-1")
+  div.modal-dialog
+    div.modal-content
+      div.modal-header
+        button.close(type="button", data-dismiss="modal", aria-hidden="true") &times;
+        h4.modal-title Sorry, feature not yet available
+      div.modal-body
+        | TravelplanHQ is in an experimental stage. Some buttons you see are mainly there as placeholders for future functionality.
+        | If you want to see the roadmap and plans for development, check out the project space at github: https://github.com/Teun/tphq
+      div.modal-footer
+        button.btn.btn-default(type="button", data-dismiss="modal") OK
