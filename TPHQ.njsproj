@@ -33,6 +33,9 @@
     <Content Include="config.js">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="config\middlewares\authorization.js">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="config\routes.js">
       <SubType>Content</SubType>
     </Content>
@@ -40,6 +43,9 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="data\plan.js">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="models\user.js">
       <SubType>Content</SubType>
     </Content>
     <Content Include="package.json" />
@@ -109,16 +115,22 @@
     <Content Include="views\partials\navbar.jade">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="views\user\login.jade">
+      <SubType>Content</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="config\middlewares" />
     <Folder Include="data" />
     <Folder Include="data\plans" />
     <Folder Include="config" />
+    <Folder Include="models" />
     <Folder Include="public\" />
     <Folder Include="public\js\" />
     <Folder Include="public\css\" />
     <Folder Include="public\fonts\" />
     <Folder Include="views\" />
+    <Folder Include="views\user" />
     <Folder Include="views\partials" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />
