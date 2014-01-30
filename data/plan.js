@@ -51,8 +51,21 @@ exports.getPlan = function (id, success) {
     }
   });
 }
-exports.savePlan = function (id, plan) {
+exports.canSave = function (planID, user, done) {
+  console.log(user);
+  done(user.username == 'teun');
+}
+
+exports.savePlan = function (id, plan, options) {
   whenPlansLoaded(function (all) {
+    var opt = options || {};
+    var oldPlan = all[id];
+    plan.id = id;
+    plan.server = oldPlan.server;
+    if(opt.owner)plan.owner = opt.owner;
+    if (opt.author) {
+      plan.author.name = opt.author;
+    }
     all[id] = plan;
     var outputFilename = folder + id + ".json";
     fs.writeFile(outputFilename, JSON.stringify(plan, null, 4), function (err) {

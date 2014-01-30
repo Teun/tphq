@@ -33,8 +33,24 @@ exports.detailJson = function (req, res) {
   plans.getPlan(req.params.planID, function (d) { res.json(d); });
 };
 exports.updateDetailJson = function (req, res) {
-  plans.savePlan(req.params.planID, req.body);
-  res.json(true);
+  var noway = function () {
+    res.status(403);
+    res.send("No way");
+    return;
+  }
+  if (!req.isAuthenticated()) {
+    noway();
+    return;
+  }
+  plans.canSave(req.params.planID, req.user, function (ok) {
+    if (!ok) {
+      noway();
+      return;
+    }
+    plans.savePlan(req.params.planID, req.body, { owner: req.session.passport.user, author: req.user.name });
+    res.json(true);
+  });
+
 };
 exports.locationJson = function (req, res) {
   var newUrl = "http://www.tripadvisor.com/TypeAheadJson" + req._parsedUrl.search;
