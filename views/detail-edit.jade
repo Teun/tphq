@@ -36,7 +36,7 @@ block central
           tr
             td Location
             td
-              input(data-bind="value:name")
+              input.edit(data-bind="value:name")
               span &nbsp;
               button.btn.btn-info#btn-lookup(data-target="#location-lookup-modal", data-toggle="modal") ...
           tr
@@ -48,6 +48,10 @@ block central
             td Number of nights
             td
               input(data-bind="value:days")
+          tr
+            td Description
+            td
+              textarea.edit(data-bind="value:description")
           tr
             td
             td 
