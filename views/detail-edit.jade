@@ -69,6 +69,8 @@ block central
     button.btn#btn-save-plan(data-bind="attr:{'class': ($data.dirty() ? 'btn btn-primary' : 'btn disabled' )}", data-content="Saved", data-placement="right") Save plan
 
 block initScript
+  script
+    = 'var access = \'' + model.access + '\''
   script.
-    TPHQ.initPlanEdit('plan.json');
+    TPHQ.initPlanEdit('plan.json?' + (new Date()).getTime(), access);
 

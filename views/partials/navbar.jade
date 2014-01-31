@@ -26,6 +26,15 @@
         ul.dropdown-menu
           li
             a.share-facebook(href="#") Facebook
+    ul.nav.navbar-nav.navbar-right
+      if (req.isAuthenticated())
+        li
+          a(href="/users/"+req.user.id, title="Profile") Profile
+        li
+          a(href="/logout", title="logout") Logout
+      else
+        li
+          a(href="/login", title="Login") Login
 
 div.modal.fade#alpha-explainer(tabindex="-1")
   div.modal-dialog
