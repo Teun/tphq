@@ -51,6 +51,11 @@ exports.getPlan = function (id, success) {
     }
   });
 }
+exports.getAccessFor = function (plan, user) {
+  if (user.id == plan.owner) return "full";
+  // TODO: check right for notes
+  return "none";
+}
 exports.canSave = function (planID, user, done) {
   console.log(user);
   done(user.username == 'teun');

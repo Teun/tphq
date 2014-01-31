@@ -244,14 +244,14 @@ var TPHQ = (function()
     });
     $('.plan-detail').show();
   }
-  scope.initPlanDetail = function (url) {
-    wireDetailButtons('map');
+  scope.initPlanDetail = function (url, access) {
+    wireDetailButtons('map', access);
     commonInitDetail(url, function () {
       scope.model.initMap();
     });
   }
-  scope.initPlanEdit = function (url) {
-    wireDetailButtons('edit');
+  scope.initPlanEdit = function (url, access) {
+    wireDetailButtons('edit', access);
     var selectedLocation = null;
     $('#lookup-entry').typeahead(
       {
@@ -283,8 +283,6 @@ var TPHQ = (function()
           scope.model.resetDirty();
           $(ev.currentTarget).popover('show');
           window.setTimeout(function(){$(ev.currentTarget).popover('hide');},2000);
-
-
         }
       });
     });
@@ -304,17 +302,21 @@ var TPHQ = (function()
   }
   var nextId = (new Date()).getTime();
   var newId = function () { return (nextId++).toString(); }
-  var wireDetailButtons = function (current) {
-    var wire = function (btn, isCurrent, to) {
+  var wireDetailButtons = function (current, editMode) {
+    var wire = function (btn, isCurrent, to, clickable) {
       if (isCurrent) {
         btn.addClass('btn-primary');
       } else {
-        btn.click(function () { window.location.href = to; })
+        if (clickable) {
+          btn.click(function () { window.location.href = to; })
+        } else {
+          btn.addClass('disabled');
+        }
       }
     };
-    wire($('#btn-map'), current == 'map', './');
-    wire($('#btn-list'), current == 'list', './list');
-    wire($('#btn-edit'), current == 'edit', './edit');
+    wire($('#btn-map'), current == 'map', './', true);
+    wire($('#btn-list'), current == 'list', './list', false);
+    wire($('#btn-edit'), current == 'edit', './edit', editMode == "full");
   }
   scope.select = function (id) {
     if (id == null) {

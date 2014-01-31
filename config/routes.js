@@ -11,15 +11,16 @@ exports.index = function (req, res) {
 };
 var renderForPlan = function (req, res, urlAppend, todo) {
   plans.getPlan(req.params.planID, function (p) {
-    console.log(p);
+    //console.log(p);
     var canonUrl = plans.urlFor(p, urlAppend);
     if (canonUrl != req.url) {
-      console.log(req.url + ' -> ');
-      console.log(canonUrl);
+      //console.log(req.url + ' -> ');
+      //console.log(canonUrl);
       res.redirect(canonUrl);
       return;
     }
     p.title = 'Travelplan: ' + p.plan.title;
+    p.access = plans.getAccessFor(p, req.user);
     todo(p);
   });
 }
@@ -39,13 +40,11 @@ exports.updateDetailJson = function (req, res) {
     return;
   }
   if (!req.isAuthenticated()) {
-    noway();
-    return;
+    return noway();
   }
   plans.canSave(req.params.planID, req.user, function (ok) {
     if (!ok) {
-      noway();
-      return;
+      return noway();
     }
     plans.savePlan(req.params.planID, req.body, { owner: req.session.passport.user, author: req.user.name });
     res.json(true);
