@@ -42,13 +42,12 @@ exports.updateDetailJson = function (req, res) {
   if (!req.isAuthenticated()) {
     return noway();
   }
-  plans.canSave(req.params.planID, req.user, function (ok) {
-    if (!ok) {
-      return noway();
-    }
+  if(!plans.canSave(req.params.planID, req.user)){
+    return noway();
+  }else{
     plans.savePlan(req.params.planID, req.body, { owner: req.session.passport.user, author: req.user.name });
     res.json(true);
-  });
+  }
 
 };
 exports.locationJson = function (req, res) {
