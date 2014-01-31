@@ -57,8 +57,7 @@ exports.getAccessFor = function (plan, req) {
   return "none";
 }
 exports.canSave = function (planID, user) {
-  console.log(user);
-  return(user.username == 'teun');
+  return(user && user.username == 'teun');
 }
 
 exports.savePlan = function (id, plan, options) {
