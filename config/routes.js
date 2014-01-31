@@ -20,7 +20,7 @@ var renderForPlan = function (req, res, urlAppend, todo) {
       return;
     }
     p.title = 'Travelplan: ' + p.plan.title;
-    p.access = plans.getAccessFor(p, req.user);
+    p.access = plans.getAccessFor(p, req);
     todo(p);
   });
 }

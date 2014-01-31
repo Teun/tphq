@@ -51,14 +51,14 @@ exports.getPlan = function (id, success) {
     }
   });
 }
-exports.getAccessFor = function (plan, user) {
-  if (user.id == plan.owner) return "full";
+exports.getAccessFor = function (plan, req) {
   // TODO: check right for notes
+  if(req.session.passport && exports.canSave(plan.id, req.user)) return "full";
   return "none";
 }
-exports.canSave = function (planID, user, done) {
+exports.canSave = function (planID, user) {
   console.log(user);
-  done(user.username == 'teun');
+  return(user.username == 'teun');
 }
 
 exports.savePlan = function (id, plan, options) {
