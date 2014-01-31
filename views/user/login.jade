@@ -1,0 +1,27 @@
+extends ../layout
+
+block content
+  div.page-header
+    h1 Login
+
+  div.col-md-3
+
+  div.col-md-4
+    form.login.form-horizontal(method="post")
+      p.error= model.message
+      .control-group
+        label.control-label(for='email') Email
+        .controls
+          input#email(type='text', name="email", placeholder='Email')
+
+      .control-group
+        label.control-label(for='password') Password
+        .controls
+          input#password(type='password', name="password", placeholder='Password')
+
+      .form-actions
+        button.btn.btn-primary(type='submit') Login
+        | &nbsp;or&nbsp;
+        a.show-signup(href="/signup") sign up
+
+  div.col-md-3
