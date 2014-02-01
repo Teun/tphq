@@ -188,8 +188,12 @@ var TPHQ = (function()
         if (place.latlng) {
           var latlng = place.latlng();
           placeNr++;
-          var marker = L.marker(latlng, { icon: L.divIcon({html: placeNr, iconSize:15})}).addTo(scope.map);
-          var popup = marker.bindPopup("<h2>" + place.name() + " (" + place.formattedDate() + ")</h2>" + place.description());
+          var marker = L.marker(latlng, { icon: L.divIcon({ html: placeNr, iconSize: 15 }) }).addTo(scope.map);
+          var name = place.name();
+          if (place.lookupMeta && place.lookupMeta.src() == 'tripadvisor') {
+            name = "<a target='_blank' href='http://www.tripadvisor.com" + place.lookupMeta.url() + "'>" + name + "</a>";
+          }
+          var popup = marker.bindPopup("<h2>" + name + " (" + place.formattedDate() + ")</h2>" + place.description());
           scope.mapItems.markers.push(marker);
           poly.push(latlng);
           var funcToCreateScope = function (m) {
