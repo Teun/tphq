@@ -1,10 +1,10 @@
-﻿exports.auth =
+exports.auth =
   {
     fb:
       {
-        clientID: 'dafadf',
-        clientSecret: 'adfad',
-        callbackUrl: 'http://localhost/callback'
+        clientID: '1437410026515060',
+        clientSecret: '872aa85f7fded7044fd3109c977144b8',
+        callbackUrl: 'http://localhost:3000/auth/facebook/callback'
       }
   };
 exports.server = 
