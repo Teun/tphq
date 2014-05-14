@@ -32,10 +32,10 @@ var TPHQ = (function()
             handlers[i](place);
           }
         }
-        place.formattedDate = ko.computed(function () {
+        var findStartDate = function(){
           var startDateValue = plan.startDate();
           if (startDateValue <= 0) {
-            return "unknown";
+            return null;
           }
           var startDate = new Date(startDateValue);
           var extra = 0;
@@ -43,11 +43,26 @@ var TPHQ = (function()
             var p = places()[i];
             if (p.id() == place.id()) {
               var newDate = startDate.add({ days: extra });
-              return newDate.toFormat("D MMM YYYY");
+              return newDate;
             }
             if(p.days)extra += Number(p.days());
           }
-          return "-";
+          return null;
+        }
+        place.formattedDate = ko.computed(function () {
+          var startDateValue = findStartDate();
+          if (startDateValue == null) {
+            return "unknown";
+          }
+          return startDateValue.toFormat("D MMM YYYY");
+        });
+        place.formattedPeriod = ko.computed(function () {
+          var startDateValue = findStartDate();
+          if (startDateValue == null) {
+            return "unknown";
+          }
+          if(place.days)return startDateValue.toFormat("D MMM YYYY") + ' - ' + startDateValue.add({ days: Number(place.days())}).toFormat("D MMM YYYY");
+          return startDateValue.toFormat("D MMM YYYY");
         });
         return place;
       }
@@ -166,6 +181,14 @@ var TPHQ = (function()
           return "travel-group-item-template";
       }
     }
+    self.selectPrintTemplate = function (d) {
+      switch (d.type()) {
+        case "place":
+          return "place-print-template";
+        case "travel":
+          return "travel-print-template";
+      }
+    }
     self.classFor = function (d) {
       switch (d.mode()) {
         case "car":
@@ -254,6 +277,12 @@ var TPHQ = (function()
       scope.model.initMap();
     });
   }
+  scope.initPlanList = function (url, access) {
+    wireDetailButtons('list', access);
+    $('#place-list').parent().remove();
+    commonInitDetail(url, function () {
+    });
+  }
   scope.initPlanEdit = function (url, access) {
     wireDetailButtons('edit', access);
     var selectedLocation = null;
@@ -319,7 +348,7 @@ var TPHQ = (function()
       }
     };
     wire($('#btn-map'), current == 'map', './', true);
-    wire($('#btn-list'), current == 'list', './list', false);
+    wire($('#btn-list'), current == 'list', './list', true);
     wire($('#btn-edit'), current == 'edit', './edit', editMode == "full");
   }
   scope.select = function (id) {

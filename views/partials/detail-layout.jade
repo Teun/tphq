@@ -1,4 +1,4 @@
-﻿extends ../layout
+extends ../layout
 
 block meta
   meta(property="og:image", content=model.plan.images[0].large)
@@ -19,12 +19,12 @@ block content
         img(data-bind="attr:{'src': plan.images()[0].small }", style="width:100px;", src=model.plan.images[0].small)
         div.btn-group
           button.btn#btn-map(type='button') map
-          button.btn.disabled#btn-list(type='button') list
+          button.btn#btn-list(type='button') list
           button.btn#btn-edit(type='button') edit
 
   div.row
     div.col-md-3
-      div.list-group(data-bind="template:{name:selectPlaceTemplate, foreach:plan.places}")
+      div.list-group(data-bind="template:{name:selectPlaceTemplate, foreach:plan.places}")#place-list
     div.col-md-9
       block central
 
@@ -39,6 +39,22 @@ block content
     a.list-group-item.travel-item(href="#")
       span.travel-glyph
         span(data-bind="attr:{class: $root.classFor($data)}")
+
+  script(type="text/html",id="place-print-template")
+    h4 Stay: 
+      span(data-bind="text:name")
+      span(data-bind="text:', ' + $data.days() + ' night(s)'")
+    div.indented
+      p
+        span(data-bind="text:formattedPeriod")
+      p(data-bind="text:description")
+
+  script(type="text/html",id="travel-print-template")
+    h4 Travel: 
+      span(data-bind="text:$data.mode")
+    div.indented
+      p(data-bind="text:description")
+
   script(type="text/html",id="place-popup-template")
     h2(data-bind="text:name")
     p(data-bind="text:description")

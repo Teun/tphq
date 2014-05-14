@@ -1,0 +1,11 @@
+extends partials/detail-layout
+
+block central
+  div.list-group(data-bind="template:{name:selectPrintTemplate, foreach:plan.places}")#full-list
+
+
+block initScript
+  script
+    = 'var access = \'' + model.access + '\''
+  script.
+    TPHQ.initPlanList('plan.json?' + (new Date()).getTime(), access);
