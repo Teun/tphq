@@ -14,8 +14,8 @@ var renderForPlan = function (req, res, urlAppend, todo) {
     //console.log(p);
     var canonUrl = plans.urlFor(p, urlAppend);
     if (canonUrl != req.url) {
-      //console.log(req.url + ' -> ');
-      //console.log(canonUrl);
+      console.log(req.url + ' -> ');
+      console.log(canonUrl);
       res.redirect(canonUrl);
       return;
     }
@@ -29,6 +29,9 @@ exports.detailEdit = function (req, res) {
 };
 exports.detailView = function (req, res) {
   renderForPlan(req, res, '', function (model) { res.render('detail-view', { model: model }); });
+};
+exports.detailList = function (req, res) {
+  renderForPlan(req, res, 'list', function (model) { res.render('detail-list', { model: model }); });
 };
 exports.detailJson = function (req, res) {
   plans.getPlan(req.params.planID, function (d) { res.json(d); });
@@ -124,6 +127,7 @@ exports.logout = function (req, res) {
 exports.init = function (app) {
   app.get('/', exports.index);
   app.get('/itinerary/:userName/:planID/[^/]+/', exports.detailView);
+  app.get('/itinerary/:userName/:planID/[^/]+/list', exports.detailList);
   app.get('/itinerary/:userName/:planID/[^/]+/edit', exports.detailEdit);
   app.get('/itinerary/:userName/:planID/[^/]+/plan.json', exports.detailJson);
   app.post('/itinerary/:userName/:planID/[^/]+/plan.json', exports.updateDetailJson);
