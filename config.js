@@ -1,4 +1,4 @@
-﻿var express = require('express');
+var express = require('express');
 var passport = require('passport');
 var mongoStore = require('connect-mongo')(express);
 var flash = require('connect-flash');
@@ -103,16 +103,16 @@ exports.passportCfg = function (passport, config) {
   passport.use(new FacebookStrategy({
     clientID: config.auth.fb.clientID
       , clientSecret: config.auth.fb.clientSecret
-      , callbackURL: config.auth.fb.callbackURL
+      , callbackURL: config.auth.fb.callbackUrl
   },
     function (accessToken, refreshToken, profile, done) {
       User.findOne({ 'facebook.id': profile.id }, function (err, user) {
         if (err) { return done(err) }
         if (!user) {
+          console.log(profile);
           user = new User({
             name: profile.displayName
-            , email: profile.emails[0].value
-            , username: profile.username
+            , username: profile.id
             , provider: 'facebook'
             , facebook: profile._json
           })
