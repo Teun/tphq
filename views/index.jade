@@ -11,17 +11,11 @@ mixin thumb(plan)
 
 block content
   div.page-header
-    h1= title
+    h1= model.title
 
-  div.col-md-3
-    h4 Plan, share
-    p
-      | travelplanHQ will soon allow you to add your own plans, share them through social media, clone plans from other users and 
-      | customize them to your needs
-    p travelplanHQ is in early alpha status. No signups are possible yet.
+  if model.introblock == "welcome"
+    include partials/contentblocks/welcome
 
-  div.col-md-2
-    +thumb(model.suggestions[0])
-
-  div.col-md-2
-    +thumb(model.suggestions[1])
+  each item in model.suggestions
+    div.col-md-2
+      +thumb(item)
