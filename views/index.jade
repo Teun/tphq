@@ -8,6 +8,11 @@ mixin thumb(plan)
         small= 'by ' + plan.author.name
         p=plan.plan.description
 
+mixin thumb_new()
+    a.thumbnail(href='/itinerary/new/')
+      div.caption 
+        h4 Add new travel plan
+
 
 block content
   div.page-header
@@ -15,6 +20,10 @@ block content
 
   if model.introblock == "welcome"
     include partials/contentblocks/welcome
+  
+  if model.include_newbutton
+    div.col-md-2
+      +thumb_new()
 
   each item in model.suggestions
     div.col-md-2

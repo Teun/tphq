@@ -51,6 +51,19 @@ exports.getPlan = function (id, success) {
     }
   });
 }
+function rndId(){
+  var letters = "abcdefghijkmnpqrstuvwyxz0123456789";
+  var text = "";
+  for( var i=0; i < 6; i++ )
+    text += letters.charAt(Math.floor(Math.random() * letters.length));
+  return text;
+}
+exports.createNew = function(){
+  var plan = {plan: {title:"New plan", description:"", places:[]}, author:{}};
+  plan.id = rndId();
+  console.log(plan);
+  return plan;
+}
 exports.getAccessFor = function (plan, req) {
   // TODO: check right for notes
   if(req.session.passport && exports.canSave(plan, req.user)) return "full";
@@ -64,8 +77,11 @@ exports.savePlan = function (id, plan, options) {
   whenPlansLoaded(function (all) {
     var opt = options || {};
     var oldPlan = all[id];
+    if(oldPlan){
+      plan.server = oldPlan.server;
+    }
     plan.id = id;
-    plan.server = oldPlan.server;
+    console.log(plan);
     if(opt.owner)plan.owner = opt.owner;
     if(opt.author) {
       plan.author.name = opt.author;
@@ -114,7 +130,7 @@ exports.getMine = function (user, success) {
         res.push(plan);
       }
     }
-		console.log(res);
+    //console.log(res);
     success(res);
   });
 }

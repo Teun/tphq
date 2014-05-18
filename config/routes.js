@@ -12,7 +12,7 @@ exports.index = function (req, res) {
 exports.my = function (req, res) {
   plans.getMine(req.user, function (plans) {
     console.log(plans);
-    res.render('index', { model: { title: 'My plans', suggestions: plans } });
+    res.render('index', { model: { title: 'My plans', suggestions: plans, include_newbutton:true } });
   });
 };
 var renderForPlan = function (req, res, urlAppend, todo) {
@@ -42,6 +42,12 @@ exports.detailList = function (req, res) {
 exports.detailJson = function (req, res) {
   plans.getPlan(req.params.planID, function (d) { res.json(d); });
 };
+exports.newPlan = function (req, res) {
+  var newPlan = plans.createNew();
+  plans.savePlan(newPlan.id, newPlan, { author: req.user.name, userid: req.user.username});
+  res.redirect(plans.urlFor(newPlan, ''));
+}
+
 exports.updateDetailJson = function (req, res) {
   var noway = function () {
     res.status(403);
@@ -143,6 +149,7 @@ exports.init = function (app) {
   app.get('/itinerary/:userName/:planID/[^/]+/plan.json', exports.detailJson);
   app.post('/itinerary/:userName/:planID/[^/]+/plan.json', exports.updateDetailJson);
   app.get('/location.json', exports.locationJson);
+  app.get('/itinerary/new', ensureAuthenticated, exports.newPlan);
   
   app.get('/my', ensureAuthenticated, exports.my);
 
