@@ -79,6 +79,13 @@ var TPHQ = (function()
       }
       places.add = function () {
         var last = scope.model.plan.places.pop();
+        if(!last) last=extendPlace(ko.mapping.fromJS({
+          id: newId(),
+          "type": "travel",
+          "mode": "plane",
+          "description": "",
+          selected: false
+        }));
         var newTransport = {
           id: newId(),
           "type": "travel",

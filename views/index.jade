@@ -2,7 +2,8 @@ extends layout
 
 mixin thumb(plan)
     a.thumbnail(href='/itinerary/x/' + plan.id + '/x/')
-      img(src=plan.plan.images[0].small, style="height:200px; overflow-x:clip")
+      if plan.plan.images && plan.plan.images.length > 0
+        img(src=plan.plan.images[0].small, style="height:200px; overflow-x:clip")
       div.caption 
         h4= plan.plan.title
         small= 'by ' + plan.author.name

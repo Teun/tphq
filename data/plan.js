@@ -59,7 +59,7 @@ function rndId(){
   return text;
 }
 exports.createNew = function(){
-  var plan = {plan: {title:"New plan", description:"", places:[]}, author:{}};
+  var plan = {plan: {title:"New plan", startDate:0, description:"", places:[]}, author:{}};
   plan.id = rndId();
   console.log(plan);
   return plan;
