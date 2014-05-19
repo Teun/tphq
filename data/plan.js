@@ -1,4 +1,4 @@
-﻿var async = require('async');
+var async = require('async');
 var cfg = require('../config');
 var fs = require('fs');
 var folder = cfg.data.planPath || __dirname + '/plans/';
@@ -51,24 +51,41 @@ exports.getPlan = function (id, success) {
     }
   });
 }
+function rndId(){
+  var letters = "abcdefghijkmnpqrstuvwyxz0123456789";
+  var text = "";
+  for( var i=0; i < 6; i++ )
+    text += letters.charAt(Math.floor(Math.random() * letters.length));
+  return text;
+}
+exports.createNew = function(){
+  var plan = {plan: {title:"New plan", startDate:0, description:"", places:[]}, author:{}};
+  plan.id = rndId();
+  console.log(plan);
+  return plan;
+}
 exports.getAccessFor = function (plan, req) {
   // TODO: check right for notes
-  if(req.session.passport && exports.canSave(plan.id, req.user)) return "full";
+  if(req.session.passport && exports.canSave(plan, req.user)) return "full";
   return "none";
 }
-exports.canSave = function (planID, user) {
-  return(user && user.username == 'teun');
+exports.canSave = function (plan, user) {
+  return(user && (user.username == plan.author.id || !plan.author.id));
 }
 
 exports.savePlan = function (id, plan, options) {
   whenPlansLoaded(function (all) {
     var opt = options || {};
     var oldPlan = all[id];
+    if(oldPlan){
+      plan.server = oldPlan.server;
+    }
     plan.id = id;
-    plan.server = oldPlan.server;
+    console.log(plan);
     if(opt.owner)plan.owner = opt.owner;
-    if (opt.author) {
+    if(opt.author) {
       plan.author.name = opt.author;
+      plan.author.id = opt.userid;
     }
     all[id] = plan;
     var outputFilename = folder + id + ".json";
@@ -97,11 +114,23 @@ exports.urlFor = function (plan, append) {
 }
 exports.getSome = function (success) {
   var res = [];
-  exports.getPlan('dw2wtz', function (p) {
-    res.push(p);
-    exports.getPlan('wy2ore', function (p) {
-      res.push(p);
-      success(res);
-    });
+  whenPlansLoaded(function (all) {
+    for(var key in all){
+      res.push(all[key]);
+    }
+    success(res);
+  });
+}
+exports.getMine = function (user, success) {
+  var res = [];
+  whenPlansLoaded(function (all) {
+    for(var key in all){
+      var plan = all[key];
+      if(plan.author.id == user.username){
+        res.push(plan);
+      }
+    }
+    //console.log(res);
+    success(res);
   });
 }
