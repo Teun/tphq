@@ -3,6 +3,7 @@ var request = require('request');
 var passport = require('passport');
 var mongoose = require('mongoose')
   , User = mongoose.model('User');
+var smartproxy = require('./smartproxy.js');
 
 exports.index = function (req, res) {
   plans.getSome(function (some) {
@@ -67,10 +68,6 @@ exports.updateDetailJson = function (req, res) {
   });
 
 };
-exports.locationJson = function (req, res) {
-  var newUrl = "http://www.tripadvisor.com/TypeAheadJson" + req._parsedUrl.search;
-  request(newUrl).pipe(res);
-}
 exports.login = function (req, res) {
   res.render('user/login', {
     model: {
@@ -148,7 +145,7 @@ exports.init = function (app) {
   app.get('/itinerary/:userName/:planID/[^/]+/edit', exports.detailEdit);
   app.get('/itinerary/:userName/:planID/[^/]+/plan.json', exports.detailJson);
   app.post('/itinerary/:userName/:planID/[^/]+/plan.json', exports.updateDetailJson);
-  app.get('/location.json', exports.locationJson);
+  app.get('/location.json', smartproxy.locationJson);
   app.get('/itinerary/new', ensureAuthenticated, exports.newPlan);
   
   app.get('/my', ensureAuthenticated, exports.my);

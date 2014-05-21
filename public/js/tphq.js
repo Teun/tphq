@@ -52,7 +52,7 @@ var TPHQ = (function()
         place.formattedDate = ko.computed(function () {
           var startDateValue = findStartDate();
           if (startDateValue == null) {
-            return "unknown";
+            return "date unknown";
           }
           return startDateValue.toFormat("D MMM YYYY");
         });
@@ -296,19 +296,20 @@ var TPHQ = (function()
     $('#lookup-entry').typeahead(
       {
         name: 'locations',
-        valueKey:'name',
+        valueKey:'fullName',
         remote: {
-          url: '/location.json?action=SITEWIDECOMBINEDV2&global=true&startTime=1385665732480&action=SITEWIDECOMBINEDV2&global=true&startTime=' + new Date().getTime() + '&query=%QUERY',
+          url: '/location.json?action=geo&startTime=' + new Date().getTime() + '&query=%QUERY',
           filter: function (hits) {
             var result = [];
             for (var i = 0; i < hits.length; i++) {
-              if (hits[i].type == 'GEO') result.push(hits[i]);
+              if (hits[i].type == 'GEO' && hits[i].coords) result.push(hits[i]);
+              hits[i].fullName = hits[i].name + ' (' +  hits[i].geo_name + ')';
             }
             return result;
           },
         },
         template: function (d) {
-          return d.name + ', ' + d.geo_name;
+          return d.name + ' (' + d.geo_name + ')';
         }
 
       }).on('typeahead:selected', function (ev, d) { selectedLocation = d; });
@@ -328,7 +329,7 @@ var TPHQ = (function()
     });
     $('#btn-select-location').click(function () {
       var selected = scope.model.selectedPlace();
-      selected.name(selectedLocation.name + ", " + selectedLocation.geo_name);
+      selected.name(selectedLocation.name);
       var ix = selectedLocation.coords.indexOf(",");
       selected.latlng([parseFloat(selectedLocation.coords.substr(0, ix)), parseFloat(selectedLocation.coords.substr(ix + 1))]);
       if (!selected.lookupMeta) selected.lookupMeta = ko.observable();

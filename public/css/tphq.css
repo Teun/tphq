@@ -56,3 +56,9 @@ td.caption {
 .indented{
   padding-left:20px;
 }
+div.modal-body>span.twitter-typeahead{
+  width:100%;
+}
+input#lookup-entry{
+width:100%;
+}
