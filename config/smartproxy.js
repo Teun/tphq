@@ -3,8 +3,8 @@ var request = require('request');
 
 exports.locationJson = function (req, res) {
   var newUrl = "http://www.tripadvisor.com/TypeAheadJson?action=SITEWIDECOMBINEDV2&global=true";
-  if(req.query.action)newUrl += "&types=" + req.query.action;
-  newUrl += "&query=geo";
+  newUrl += "&types=geo";
+  newUrl += "&query=" + req.query.query;
   console.log(newUrl);
 
   var r = request(newUrl, function(err, resp, body){
@@ -17,8 +17,9 @@ exports.locationJson = function (req, res) {
 }
 exports.sightJson = function (req, res) {
   var newUrl = "http://www.tripadvisor.com/TypeAheadJson?action=SITEWIDECOMBINEDV2&global=true";
-  if(req.query.action)newUrl += "&types=" + req.query.action;
-  newUrl += "&query=attr";
+  newUrl += "&types=attr";
+  if(req.query.parentids)newUrl += "&parentids=" + req.query.parentids;
+  newUrl += "&query=" + req.query.query;
 
   var r = request(newUrl, function(err, resp, body){
       if(err){

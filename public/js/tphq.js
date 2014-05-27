@@ -22,6 +22,11 @@ var TPHQ = (function()
           }
         }
       }
+      sights.add = function(s){
+        s= ko.mapping.fromJS(s);
+        extendSight(s);
+        sights.push(s);
+      }
       for (var i = 0; i < sights().length; i++) {
         extendSight(sights()[i]);
       }
@@ -314,8 +319,12 @@ var TPHQ = (function()
   }
   scope.initPlanEdit = function (url, access) {
     wireDetailButtons('edit', access);
+
     var selectedLocation = null;
-    $('#location-lookup-modal').on('shown.bs.modal', function(){$('#location-lookup-entry').select();});
+    $('#location-lookup-modal').on('shown.bs.modal', function(){
+      $('#location-lookup-entry').select();
+      selectedLocation = null;
+    });
     $('#location-lookup-entry').typeahead(
       {
         name: 'locations',
@@ -345,10 +354,44 @@ var TPHQ = (function()
       selected.lookupMeta({src:'tripadvisor', url:selectedLocation.url, id:selectedLocation.value});
     });
 
-    $('#sight-lookup-modal').on('shown.bs.modal', function(){$('#sight-lookup-entry').select();});
+    var selectedSight = null;
+    $('#sight-lookup-modal').on('shown.bs.modal', function(){
+      $('#sight-lookup-entry').select();
+      selectedSight = null;
+    });
+    $('#sight-lookup-entry').typeahead(
+      {
+        name: 'sights',
+        valueKey:'fullName',
+        remote: {
+          url: '/sight.json?action=geo&startTime=' + new Date().getTime() + '&query=%QUERY%&parentids=%PARENT%',
+          replace: function(url, q){
+            var place = scope.model.selectedPlace();
+            var placeid = '';
+            if(place && place.lookupMeta && place.lookupMeta.id) placeid = place.lookupMeta.id();
+            return url.replace('%QUERY%', q).replace('%PARENT%', placeid);
+          },
+          filter: function (hits) {
+            var result = [];
+            for (var i = 0; i < hits.length; i++) {
+              if (hits[i].coords) result.push(hits[i]);
+              hits[i].fullName = hits[i].name + ' (' +  hits[i].geo_name + ')';
+            }
+            return result;
+          },
+        },
+        template: function (d) {
+          return d.name + ' (' + d.geo_name + ')';
+        }
+
+      }).on('typeahead:selected', function (ev, d) { selectedSight = d; });
     $('#btn-select-sight').click(function () {
       var selected = scope.model.selectedPlace();
-      selected.sights.push(ko.mapping.fromJS({name: $('#sight-lookup-entry')[0].value}));
+      var s = {name: $('#sight-lookup-entry')[0].value};
+      if(selectedSight){
+        s.lookupMeta = {src:'tripadvisor', url:selectedSight.url, id:selectedSight.value};
+      }
+      selected.sights.add(s);
     });
 
     $('#btn-save-plan').click(function (ev) {
