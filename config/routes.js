@@ -146,6 +146,7 @@ exports.init = function (app) {
   app.get('/itinerary/:userName/:planID/[^/]+/plan.json', exports.detailJson);
   app.post('/itinerary/:userName/:planID/[^/]+/plan.json', exports.updateDetailJson);
   app.get('/location.json', smartproxy.locationJson);
+  app.get('/sight.json', smartproxy.sightJson);
   app.get('/itinerary/new', ensureAuthenticated, exports.newPlan);
   
   app.get('/my', ensureAuthenticated, exports.my);

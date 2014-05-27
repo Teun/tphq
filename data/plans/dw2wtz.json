@@ -9,7 +9,9 @@
                 "id": "7",
                 "type": "travel",
                 "mode": "plane",
-                "description": ""
+                "description": "",
+                "sights": [],
+                "formattedPeriod": "1 Feb 2014"
             },
             {
                 "id": "8",
@@ -27,20 +29,32 @@
                     "src": "tripadvisor",
                     "url": "/Tourism-g1507054-Ao_Nang_Krabi_Town_Krabi_Province-Vacations.html",
                     "id": 1507054
-                }
+                },
+                "formattedPeriod": "1 Feb 2014 - 5 Feb 2014"
             },
             {
                 "id": "1390581711259",
                 "type": "travel",
                 "mode": "plane",
-                "description": ""
+                "description": "",
+                "sights": [],
+                "formattedPeriod": "5 Feb 2014"
             },
             {
                 "id": "1390581711260",
                 "type": "place",
                 "name": "Khao Sok National Park, Thailand, Asia",
                 "description": "",
-                "sights": [],
+                "sights": [
+                    {
+                        "name": "Khao Sok National Park (Surat Thani, Thailand)",
+                        "lookupMeta": {
+                            "src": "tripadvisor",
+                            "url": "/Attraction_Review-g297917-d455332-Reviews-Khao_Sok_National_Park-Surat_Thani_Surat_Thani_Province.html",
+                            "id": 455332
+                        }
+                    }
+                ],
                 "latlng": [
                     8.970843,
                     98.6989
@@ -51,20 +65,59 @@
                     "src": "tripadvisor",
                     "url": "/Tourism-g1657011-Khao_Sok_National_Park_Surat_Thani_Province-Vacations.html",
                     "id": 1657011
-                }
+                },
+                "formattedPeriod": "5 Feb 2014 - 8 Feb 2014"
             },
             {
                 "id": "6",
                 "type": "travel",
                 "mode": "car",
-                "description": ""
+                "description": "",
+                "sights": [],
+                "formattedPeriod": "8 Feb 2014"
             },
             {
                 "id": "1",
                 "type": "place",
                 "name": "Bangkok, Thailand, Asia",
                 "description": "Short description of the place",
-                "sights": [],
+                "sights": [
+                    {
+                        "name": "Royal Barges National Museum (Bangkok, Thailand)",
+                        "lookupMeta": {
+                            "src": "tripadvisor",
+                            "url": "/Attraction_Review-g293916-d317720-Reviews-Royal_Barges_National_Museum-Bangkok.html",
+                            "id": 317720
+                        }
+                    },
+                    {
+                        "name": "The Grand Palace (Bangkok, Thailand)",
+                        "lookupMeta": {
+                            "src": "tripadvisor",
+                            "url": "/Attraction_Review-g293916-d317603-Reviews-The_Grand_Palace-Bangkok.html",
+                            "id": 317603
+                        }
+                    },
+                    {
+                        "name": "Temple of the Reclining Buddha (Wat Pho) (Bangkok, Thailand)",
+                        "lookupMeta": {
+                            "src": "tripadvisor",
+                            "url": "/Attraction_Review-g293916-d311043-Reviews-Temple_of_the_Reclining_Buddha_Wat_Pho-Bangkok.html",
+                            "id": 311043
+                        }
+                    },
+                    {
+                        "name": "River Sun Cruise (Bangkok, Thailand)",
+                        "lookupMeta": {
+                            "src": "tripadvisor",
+                            "url": "/Attraction_Review-g293916-d3376958-Reviews-River_Sun_Cruise-Bangkok.html",
+                            "id": 3376958
+                        }
+                    },
+                    {
+                        "name": "Geocaching"
+                    }
+                ],
                 "latlng": [
                     13.803611,
                     100.6075
@@ -75,13 +128,16 @@
                     "src": "tripadvisor",
                     "url": "/Tourism-g293916-Bangkok-Vacations.html",
                     "id": 293916
-                }
+                },
+                "formattedPeriod": "8 Feb 2014 - 11 Feb 2014"
             },
             {
                 "id": "1390496131858",
                 "type": "travel",
                 "mode": "plane",
-                "description": ""
+                "description": "",
+                "sights": [],
+                "formattedPeriod": "11 Feb 2014"
             },
             {
                 "id": "1390496131859",
@@ -99,13 +155,16 @@
                     "src": "tripadvisor",
                     "url": "/Tourism-g297390-Siem_Reap_Siem_Reap_Province-Vacations.html",
                     "id": 297390
-                }
+                },
+                "formattedPeriod": "11 Feb 2014 - 17 Feb 2014"
             },
             {
                 "id": "1390583201773",
                 "type": "travel",
                 "mode": "plane",
-                "description": ""
+                "description": "",
+                "sights": [],
+                "formattedPeriod": "17 Feb 2014"
             },
             {
                 "id": "1390583201774",
@@ -123,13 +182,16 @@
                     100.5778
                 ],
                 "fromDay": 0,
-                "days": 1
+                "days": 1,
+                "formattedPeriod": "17 Feb 2014 - 18 Feb 2014"
             },
             {
                 "id": "1390578166534",
                 "type": "travel",
                 "mode": "plane",
-                "description": ""
+                "description": "",
+                "sights": [],
+                "formattedPeriod": "18 Feb 2014"
             },
             {
                 "id": "1390578166535",
@@ -147,13 +209,16 @@
                     "src": "tripadvisor",
                     "url": "/Tourism-g303921-Sukhothai_Sukhothai_Province-Vacations.html",
                     "id": 303921
-                }
+                },
+                "formattedPeriod": "18 Feb 2014 - 21 Feb 2014"
             },
             {
                 "id": "4",
                 "type": "travel",
                 "mode": "car",
-                "description": ""
+                "description": "",
+                "sights": [],
+                "formattedPeriod": "21 Feb 2014"
             },
             {
                 "id": "2",
@@ -171,13 +236,16 @@
                     "src": "tripadvisor",
                     "url": "/Tourism-g293917-Chiang_Mai-Vacations.html",
                     "id": 293917
-                }
+                },
+                "formattedPeriod": "21 Feb 2014 - 25 Feb 2014"
             },
             {
                 "id": "5",
                 "type": "travel",
                 "mode": "car",
-                "description": ""
+                "description": "",
+                "sights": [],
+                "formattedPeriod": "25 Feb 2014"
             },
             {
                 "id": "3",
@@ -195,13 +263,16 @@
                     "src": "tripadvisor",
                     "url": "/Tourism-g293916-Bangkok-Vacations.html",
                     "id": 293916
-                }
+                },
+                "formattedPeriod": "25 Feb 2014 - 26 Feb 2014"
             },
             {
                 "id": "1390583502754",
                 "type": "travel",
                 "mode": "plane",
-                "description": ""
+                "description": "",
+                "sights": [],
+                "formattedPeriod": "26 Feb 2014"
             },
             {
                 "id": "1390583502755",
@@ -219,13 +290,16 @@
                     99.1443
                 ],
                 "fromDay": 0,
-                "days": 1
+                "days": 1,
+                "formattedPeriod": "26 Feb 2014 - 27 Feb 2014"
             },
             {
                 "id": "7",
                 "type": "travel",
                 "mode": "plane",
-                "description": ""
+                "description": "",
+                "sights": [],
+                "formattedPeriod": "1 Feb 2014"
             }
         ],
         "images": [
@@ -237,6 +311,7 @@
         ]
     },
     "author": {
-        "name": "Teun Duynstee"
+        "name": "Teun Duynstee",
+        "id": "teun"
     }
 }

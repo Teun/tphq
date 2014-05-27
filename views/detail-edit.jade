@@ -1,4 +1,6 @@
-﻿extends partials/detail-layout
+extends partials/detail-layout
+
+
 
 block central
   div(data-bind="visible: !selectedPlace()")
@@ -53,10 +55,17 @@ block central
             td
               textarea.edit(data-bind="value:description")
           tr
+            td Sights
+            td
+              //div(data-bind="text: ko.toJSON(sights)")
+              div(data-bind="template:{name:'sight-list', data:$data.sights}")
+          tr
             td
             td 
               button.btn.btn-primary#btn-done(onclick="TPHQ.select(null);") Done
 
+  div 
+    button.btn#btn-save-plan(data-bind="attr:{'class': ($data.dirty() ? 'btn btn-primary' : 'btn disabled' )}", data-content="Saved", data-placement="right") Save plan
 
   div.modal.fade#location-lookup-modal
     div.modal-dialog
@@ -65,12 +74,22 @@ block central
           button.close(type="button", data-dismiss="modal", aria-hidden="true") &times;
           h4.modal-title Select a known location
         div.modal-body
-          input#lookup-entry
+          input#location-lookup-entry
         div.modal-footer
           button.btn.btn-default(type="button", data-dismiss="modal") Close
           button.btn.btn-primary#btn-select-location(type="button", data-dismiss="modal") Save changes
-  div 
-    button.btn#btn-save-plan(data-bind="attr:{'class': ($data.dirty() ? 'btn btn-primary' : 'btn disabled' )}", data-content="Saved", data-placement="right") Save plan
+
+  div.modal.fade#sight-lookup-modal
+    div.modal-dialog
+      div.modal-content
+        div.modal-header
+          button.close(type="button", data-dismiss="modal", aria-hidden="true") &times;
+          h4.modal-title Select sights you saw (or plan to see)
+        div.modal-body
+          input#sight-lookup-entry
+        div.modal-footer
+          button.btn.btn-default(type="button", data-dismiss="modal") Close
+          button.btn.btn-primary#btn-select-sight(type="button", data-dismiss="modal") Save changes
 
 block initScript
   script

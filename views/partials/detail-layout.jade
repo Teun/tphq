@@ -61,6 +61,16 @@ block content
     h2(data-bind="text:name")
     p(data-bind="text:description")
 
+  script(type="text/html",id="sight-list")
+    div(data-bind='foreach: $data')
+      span(data-bind='text: name() + " "')
+      a(data-bind='click:remove')
+        span.glyphicon.glyphicon-trash 
+      br
+    button.btn.btn-info#btn-lookup(data-target="#sight-lookup-modal", data-toggle="modal") Add
+  
+
+
 block scripts
   script(src="/js/knockout-min.js")
   script(src="/js/knockout.mapping-latest.js")
