@@ -3,10 +3,17 @@ var request = require('request');
 var passport = require('passport');
 var mongoose = require('mongoose')
   , User = mongoose.model('User');
+var smartproxy = require('./smartproxy.js');
 
 exports.index = function (req, res) {
   plans.getSome(function (some) {
-    res.render('index', { model: { title: 'Welcome to travelplanHQ', suggestions: some } });
+    res.render('index', { model: { title: 'Welcome to travelplanHQ', suggestions: some, introblock:'welcome' } });
+  });
+};
+exports.my = function (req, res) {
+  plans.getMine(req.user, function (plans) {
+    console.log(plans);
+    res.render('index', { model: { title: 'My plans', suggestions: plans, include_newbutton:true } });
   });
 };
 var renderForPlan = function (req, res, urlAppend, todo) {
@@ -36,6 +43,12 @@ exports.detailList = function (req, res) {
 exports.detailJson = function (req, res) {
   plans.getPlan(req.params.planID, function (d) { res.json(d); });
 };
+exports.newPlan = function (req, res) {
+  var newPlan = plans.createNew();
+  plans.savePlan(newPlan.id, newPlan, { author: req.user.name, userid: req.user.username});
+  res.redirect(plans.urlFor(newPlan, ''));
+}
+
 exports.updateDetailJson = function (req, res) {
   var noway = function () {
     res.status(403);
@@ -45,18 +58,16 @@ exports.updateDetailJson = function (req, res) {
   if (!req.isAuthenticated()) {
     return noway();
   }
-  if(!plans.canSave(req.params.planID, req.user)){
-    return noway();
-  }else{
-    plans.savePlan(req.params.planID, req.body, { owner: req.session.passport.user, author: req.user.name });
-    res.json(true);
-  }
+  plans.getPlan(req.params.planID, function(plan){
+    if(!plans.canSave(plan, req.user)){
+      return noway();
+    }else{
+      plans.savePlan(req.params.planID, req.body, { author: req.user.name, userid: req.user.username});
+      res.json(true);
+    }
+  });
 
 };
-exports.locationJson = function (req, res) {
-  var newUrl = "http://www.tripadvisor.com/TypeAheadJson" + req._parsedUrl.search;
-  request(newUrl).pipe(res);
-}
 exports.login = function (req, res) {
   res.render('user/login', {
     model: {
@@ -122,7 +133,10 @@ exports.logout = function (req, res) {
   req.logout();
   res.redirect('/');
 }
-
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) return next();
+  res.redirect('/login');
+}
 
 exports.init = function (app) {
   app.get('/', exports.index);
@@ -131,7 +145,11 @@ exports.init = function (app) {
   app.get('/itinerary/:userName/:planID/[^/]+/edit', exports.detailEdit);
   app.get('/itinerary/:userName/:planID/[^/]+/plan.json', exports.detailJson);
   app.post('/itinerary/:userName/:planID/[^/]+/plan.json', exports.updateDetailJson);
-  app.get('/location.json', exports.locationJson);
+  app.get('/location.json', smartproxy.locationJson);
+  app.get('/sight.json', smartproxy.sightJson);
+  app.get('/itinerary/new', ensureAuthenticated, exports.newPlan);
+  
+  app.get('/my', ensureAuthenticated, exports.my);
 
 
   app.get('/login', exports.login);
@@ -141,7 +159,7 @@ exports.init = function (app) {
   app.get('/users/:userId', exports.show);
   app.get('/logout', exports.logout)
   app.get('/auth/facebook', passport.authenticate('facebook'));
-	app.get('/auth/facebook/callback', 
-	  passport.authenticate('facebook', { successRedirect: '/',
+  app.get('/auth/facebook/callback', 
+    passport.authenticate('facebook', { successRedirect: '/',
                                       failureRedirect: '/login' }));
 }

@@ -2,26 +2,30 @@ extends layout
 
 mixin thumb(plan)
     a.thumbnail(href='/itinerary/x/' + plan.id + '/x/')
-      img(src=plan.plan.images[0].small, style="height:200px; overflow-x:clip")
+      if plan.plan.images && plan.plan.images.length > 0
+        img(src=plan.plan.images[0].small, style="height:200px; overflow-x:clip")
       div.caption 
         h4= plan.plan.title
         small= 'by ' + plan.author.name
         p=plan.plan.description
 
+mixin thumb_new()
+    a.thumbnail(href='/itinerary/new/')
+      div.caption 
+        h4 Add new travel plan
+
 
 block content
   div.page-header
-    h1= title
+    h1= model.title
 
-  div.col-md-3
-    h4 Plan, share
-    p
-      | travelplanHQ will soon allow you to add your own plans, share them through social media, clone plans from other users and 
-      | customize them to your needs
-    p travelplanHQ is in early alpha status. No signups are possible yet.
+  if model.introblock == "welcome"
+    include partials/contentblocks/welcome
+  
+  if model.include_newbutton
+    div.col-md-2
+      +thumb_new()
 
-  div.col-md-2
-    +thumb(model.suggestions[0])
-
-  div.col-md-2
-    +thumb(model.suggestions[1])
+  each item in model.suggestions
+    div.col-md-2
+      +thumb(item)

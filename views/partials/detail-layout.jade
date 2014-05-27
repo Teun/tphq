@@ -1,7 +1,8 @@
 extends ../layout
 
 block meta
-  meta(property="og:image", content=model.plan.images[0].large)
+  if model.plan.images && model.plan.images.length > 0
+    meta(property="og:image", content=model.plan.images[0].large)
   meta(name="description" content="Create and share your travel intineraries. Before, during and afterwards.")
   meta(name="og:description" content="Create and share your travel intineraries. Before, during and afterwards.")
 
@@ -16,7 +17,8 @@ block content
             span(data-bind="text:author.name")
         p(data-bind="html:plan.descriptionFormatted")
       div.col-md-2
-        img(data-bind="attr:{'src': plan.images()[0].small }", style="width:100px;", src=model.plan.images[0].small)
+        if model.plan.images && model.plan.images.length > 0
+          img(data-bind="attr:{'src': plan.images()[0].small }", style="width:100px;", src=model.plan.images[0].small)
         div.btn-group
           button.btn#btn-map(type='button') map
           button.btn#btn-list(type='button') list
@@ -58,6 +60,16 @@ block content
   script(type="text/html",id="place-popup-template")
     h2(data-bind="text:name")
     p(data-bind="text:description")
+
+  script(type="text/html",id="sight-list")
+    div(data-bind='foreach: $data')
+      span(data-bind='text: name() + " "')
+      a(data-bind='click:remove')
+        span.glyphicon.glyphicon-trash 
+      br
+    button.btn.btn-info#btn-lookup(data-target="#sight-lookup-modal", data-toggle="modal") Add
+  
+
 
 block scripts
   script(src="/js/knockout-min.js")
