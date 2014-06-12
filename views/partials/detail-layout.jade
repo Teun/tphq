@@ -37,10 +37,15 @@ block content
         span.badge(data-bind="text:$data.days")
       p.list-group-item-text(data-bind="text:formattedDate")
       p.list-group-item-text(data-bind="text:description")
+
   script(type="text/html",id="travel-group-item-template")
-    a.list-group-item.travel-item(href="#")
+    a.list-group-item.travel-item(data-bind="attr:{place: $data.id(), onclick:'TPHQ.select(' + $data.id() + ')', class:$data.selected() ? 'list-group-item travel-item active' : 'list-group-item travel-item'}")
       span.travel-glyph
         span(data-bind="attr:{class: $root.classFor($data)}")
+
+  script(type="text/html",id="sight-show-template")
+    li
+      a(data-bind="attr:{href:'#'}, text:name")
 
   script(type="text/html",id="place-print-template")
     h4 Stay: 
@@ -50,6 +55,10 @@ block content
       p
         span(data-bind="text:formattedPeriod")
       p(data-bind="text:description")
+      div(data-bind="if:sights")
+        p Sights to see:
+        div(data-bind="template: {name:'sight-show-template', foreach:sights}")
+        
 
   script(type="text/html",id="travel-print-template")
     h4 Travel: 

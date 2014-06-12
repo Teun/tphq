@@ -62,3 +62,23 @@ div.modal-body>span.twitter-typeahead{
 input#lookup-entry{
 width:100%;
 }
+
+/* extra glyphs */
+span.glyph-car{
+  background-image: url('../img/glyphicons_005_car.png');
+  background-size: cover;
+  height:11px;
+  width:13px;
+}
+span.glyph-bus{
+  background-image: url('../img/glyphicons_031_bus.png');
+  background-size: cover;
+  height:11px;
+  width:13px;
+}
+span.glyph-train{
+  background-image: url('../img/glyphicons_014_train.png');
+  background-size: cover;
+  height: 15px;
+  width: 13px;
+}

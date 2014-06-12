@@ -91,6 +91,8 @@ var TPHQ = (function()
           if(place.days)return startDateValue.toFormat("D MMM YYYY") + ' - ' + startDateValue.add({ days: Number(place.days())}).toFormat("D MMM YYYY");
           return startDateValue.toFormat("D MMM YYYY");
         });
+        place.buttonModeClass = function(mode){return mode == place.mode() ? "btn-info" : "btn-default";};
+        place.setMode = function(mode){place.mode(mode);};
         return place;
       }
       places.findId = function (id) {
@@ -181,6 +183,12 @@ var TPHQ = (function()
     self.author = ko.mapping.fromJS(data.author);
 
     self.selectedPlace = ko.observable(null);
+    self.selectedIsPlace = ko.computed(function(){
+      return self.selectedPlace() && self.selectedPlace().type() === 'place';
+    });
+    self.selectedIsTravel = ko.computed(function(){
+      return self.selectedPlace() && self.selectedPlace().type() === 'travel';
+    });
     self.cleanJson = function () {
       var obj = {
         id: self.id,
@@ -226,11 +234,13 @@ var TPHQ = (function()
     self.classFor = function (d) {
       switch (d.mode()) {
         case "car":
-          return "glyphicon glyphicon-road";
+          return "glyphicon glyph-car";
         case "plane":
           return "glyphicon glyphicon-plane";
         case "train":
-          return "glyphicon glyphicon-transfer";
+          return "glyphicon glyph-train";
+        case "bus":
+          return "glyphicon glyph-bus";
         default:
           return "";
       }
