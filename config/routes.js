@@ -4,6 +4,7 @@ var passport = require('passport');
 var mongoose = require('mongoose')
   , User = mongoose.model('User');
 var smartproxy = require('./smartproxy.js');
+var markdown = require( "markdown" ).markdown;
 
 exports.index = function (req, res) {
   plans.getSome(function (some) {
@@ -57,7 +58,7 @@ exports.contentPage = function (req, res) {
     res.status(404).send('Not found');
     return;
   }
-  res.render('content', { model: c});
+  res.render('content', { model: c, htmlBody: markdown.toHTML(c.body) });
 }
 
 exports.updateDetailJson = function (req, res) {
