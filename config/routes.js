@@ -4,6 +4,7 @@ var passport = require('passport');
 var mongoose = require('mongoose')
   , User = mongoose.model('User');
 var smartproxy = require('./smartproxy.js');
+var markdown = require( "markdown" ).markdown;
 
 exports.index = function (req, res) {
   plans.getSome(function (some) {
@@ -47,6 +48,17 @@ exports.newPlan = function (req, res) {
   var newPlan = plans.createNew();
   plans.savePlan(newPlan.id, newPlan, { author: req.user.name, userid: req.user.username});
   res.redirect(plans.urlFor(newPlan, ''));
+}
+exports.contentPage = function (req, res) {
+  var c;
+  try{
+    c = require('../data/content/' + req.params.content + '.json');
+  }catch(e){
+    console.log(e);
+    res.status(404).send('Not found');
+    return;
+  }
+  res.render('content', { model: c, htmlBody: markdown.toHTML(c.body) });
 }
 
 exports.updateDetailJson = function (req, res) {
@@ -148,6 +160,7 @@ exports.init = function (app) {
   app.get('/location.json', smartproxy.locationJson);
   app.get('/sight.json', smartproxy.sightJson);
   app.get('/itinerary/new', ensureAuthenticated, exports.newPlan);
+  app.get('/c/:content', exports.contentPage);
   
   app.get('/my', ensureAuthenticated, exports.my);
 

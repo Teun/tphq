@@ -1,9 +1,8 @@
-/*
-  
- */
-'use strict'
+/* jshint strict: true*/
+
 var TPHQ = (function()
 {
+  'use strict';
   var scope = {};
   var extendPlan = function (plan) {
     var extendSights = function(sights) {
@@ -12,8 +11,8 @@ var TPHQ = (function()
       var extendSight = function(sight){
         sight.remove = function(){
           sights.removeSight(sight);
-        }
-      }
+        };
+      };
       sights.removeSight = function(s){
         for(var i = 0; i<sights().length;i++){
           if(s.name() == sights()[i].name()){
@@ -21,16 +20,16 @@ var TPHQ = (function()
             break;
           }
         }
-      }
+      };
       sights.add = function(s){
         s= ko.mapping.fromJS(s);
         extendSight(s);
         sights.push(s);
-      }
+      };
       for (var i = 0; i < sights().length; i++) {
         extendSight(sights()[i]);
       }
-    }
+    };
     var extendPlaces = function (places) {
       if (!places) return;
       var extendPlace = function (place) {
@@ -47,18 +46,18 @@ var TPHQ = (function()
           if (exclusive && val) {
             onSelect(place);
           }
-        }
+        };
         var handlers = [];
         place.addSelectHandler = function (h) {
           handlers.push(h);
-        }
+        };
         var onSelect = function (p) {
           scope.model.selectedPlace(p);
 
           for (var i = 0; i < handlers.length; i++) {
             handlers[i](place);
           }
-        }
+        };
         var findStartDate = function(){
           var startDateValue = plan.startDate();
           if (startDateValue <= 0) {
@@ -75,35 +74,37 @@ var TPHQ = (function()
             if(p.days)extra += Number(p.days());
           }
           return null;
-        }
+        };
         place.formattedDate = ko.computed(function () {
           var startDateValue = findStartDate();
-          if (startDateValue == null) {
+          if (startDateValue === null) {
             return "date unknown";
           }
           return startDateValue.toFormat("D MMM YYYY");
         });
         place.formattedPeriod = ko.computed(function () {
           var startDateValue = findStartDate();
-          if (startDateValue == null) {
+          if (startDateValue === null) {
             return "date unknown";
           }
           if(place.days)return startDateValue.toFormat("D MMM YYYY") + ' - ' + startDateValue.add({ days: Number(place.days())}).toFormat("D MMM YYYY");
           return startDateValue.toFormat("D MMM YYYY");
         });
+        place.buttonModeClass = function(mode){return mode == place.mode() ? "btn-info" : "btn-default";};
+        place.setMode = function(mode){place.mode(mode);};
         return place;
-      }
+      };
       places.findId = function (id) {
         for (var i = 0; i < places().length; i++) {
           if (places()[i].id() == id) return i;
         }
         return -1;
-      }
+      };
       places.byId = function (id) {
         var pos = places.findId(id);
         if (pos >= 0) return places()[pos];
         return null;
-      }
+      };
       places.add = function () {
         var last = scope.model.plan.places.pop();
         if(!last) last=extendPlace(ko.mapping.fromJS({
@@ -146,7 +147,7 @@ var TPHQ = (function()
           places.splice(pos - 1, 2);
           scope.model.selectedPlace(null);
         }
-      }
+      };
       places.move = function (id, up) {
         var pos = scope.model.plan.places.findId(id);
         if (pos > 1 && up) {
@@ -159,12 +160,11 @@ var TPHQ = (function()
           oldArray[pos - 2] = tomove2;
           scope.model.plan.places(oldArray);
         }
-
-      }
-    }
+      };
+    };
     if (!plan) return null;
     extendPlaces(plan.places);
-  }
+  };
   var PlanModel = function (data) {
     var self = this;
     // some extending
@@ -181,18 +181,24 @@ var TPHQ = (function()
     self.author = ko.mapping.fromJS(data.author);
 
     self.selectedPlace = ko.observable(null);
+    self.selectedIsPlace = ko.computed(function(){
+      return self.selectedPlace() && self.selectedPlace().type() === 'place';
+    });
+    self.selectedIsTravel = ko.computed(function(){
+      return self.selectedPlace() && self.selectedPlace().type() === 'travel';
+    });
     self.cleanJson = function () {
       var obj = {
         id: self.id,
         plan: ko.mapping.toJS(self.plan),
         author: ko.mapping.toJS(self.author)
-      }
+      };
       for (var i = 0; i < obj.plan.places.length; i++) {
         delete obj.plan.places[i].selected;
         delete obj.plan.places[i].formattedDate;
       }
       return JSON.stringify(obj);
-    }
+    };
     var oldValue = ko.observable(self.cleanJson());
     self.dirty = ko.computed(function () {
       var now = self.cleanJson();
@@ -205,7 +211,7 @@ var TPHQ = (function()
     });
     self.resetDirty = function () {
       oldValue(self.cleanJson());
-    }
+    };
     
     self.selectPlaceTemplate = function (d) {
       switch (d.type()) {
@@ -214,7 +220,7 @@ var TPHQ = (function()
         case "travel":
           return "travel-group-item-template";
       }
-    }
+    };
     self.selectPrintTemplate = function (d) {
       switch (d.type()) {
         case "place":
@@ -222,24 +228,22 @@ var TPHQ = (function()
         case "travel":
           return "travel-print-template";
       }
-    }
+    };
     self.classFor = function (d) {
-      switch (d.mode()) {
-        case "car":
-          return "glyphicon glyphicon-road";
-        case "plane":
-          return "glyphicon glyphicon-plane";
-        case "train":
-          return "glyphicon glyphicon-transfer";
-        default:
-          return "";
-      }
-    }
+      return "glyphtphq glyph-" + d.mode();
+    };
     self.initMap = function () {
       scope.map = L.mapbox.map('map', 'teun.gjiilado');
       var plan = self.plan;
       var poly = [];
       var placeNr = 0;
+
+      var addClickHandler = function (m) {
+        place.addSelectHandler(function (p) {
+          m.openPopup();
+        });
+      };
+
       for (var i = 0; i < plan.places().length; i++) {
         var place = plan.places()[i];
         if (place.latlng) {
@@ -253,41 +257,36 @@ var TPHQ = (function()
           var popup = marker.bindPopup("<h2>" + name + " (" + place.formattedDate() + ")</h2>" + place.description());
           scope.mapItems.markers.push(marker);
           poly.push(latlng);
-          var funcToCreateScope = function (m) {
-            place.addSelectHandler(function (p) {
-              m.openPopup();
-            });
-          };
-          funcToCreateScope(marker);
+          addClickHandler(marker);
         }
       }
       scope.mapItems.polyline = L.polyline(poly).addTo(scope.map);
       self.fitAllOnMap();
-    }
+    };
     self.fitAllOnMap = function () {
       var bounds = null;
       var plan = self.plan;
       for (var i = 0; i < plan.places().length; i++) {
         var place = plan.places()[i]; 
         if (place.type() != 'place') continue;
-        if (bounds == null) {
+        if (bounds === null) {
           bounds = L.latLngBounds(L.latLng(place.latlng()[0], place.latlng()[1]), L.latLng(place.latlng()[0], place.latlng()[1]));
         } else {
           bounds.extend(L.latLng(place.latlng()[0], place.latlng()[1]));
         }
       }
       scope.map.fitBounds(bounds, { padding: [100, 100]});
-    }
+    };
     self.removePlace = function (place) {
       self.plan.places.remove(place.id());
-    }
+    };
     self.movePlaceUp = function (place) {
       self.plan.places.move(place.id(), true);
-    }
+    };
     self.movePlaceDown = function (place) {
       self.plan.places.move(place.id(), false);
-    }
-  }
+    };
+  };
   var commonInitDetail = function (url, afterBind) {
     $.getJSON(url)
       .done(function (data) {
@@ -304,19 +303,19 @@ var TPHQ = (function()
       return false;
     });
     $('.plan-detail').show();
-  }
+  };
   scope.initPlanDetail = function (url, access) {
     wireDetailButtons('map', access);
     commonInitDetail(url, function () {
       scope.model.initMap();
     });
-  }
+  };
   scope.initPlanList = function (url, access) {
     wireDetailButtons('list', access);
     $('#place-list').parent().remove();
     commonInitDetail(url, function () {
     });
-  }
+  };
   scope.initPlanEdit = function (url, access) {
     wireDetailButtons('edit', access);
 
@@ -413,16 +412,16 @@ var TPHQ = (function()
     });
     commonInitDetail(url, function () {
     });
-  }
+  };
   var nextId = (new Date()).getTime();
-  var newId = function () { return (nextId++).toString(); }
+  var newId = function () { return (nextId++).toString(); };
   var wireDetailButtons = function (current, editMode) {
     var wire = function (btn, isCurrent, to, clickable) {
       if (isCurrent) {
         btn.addClass('btn-primary');
       } else {
         if (clickable) {
-          btn.click(function () { window.location.href = to; })
+          btn.click(function () { window.location.href = to; });
         } else {
           btn.addClass('disabled');
         }
@@ -431,15 +430,15 @@ var TPHQ = (function()
     wire($('#btn-map'), current == 'map', './', true);
     wire($('#btn-list'), current == 'list', './list', true);
     wire($('#btn-edit'), current == 'edit', './edit', editMode == "full");
-  }
+  };
   scope.select = function (id) {
-    if (id == null) {
+    if (id === null) {
       scope.model.selectedPlace(null);
       return;
     }
     var plan = scope.model.plan.places.byId(id);
     if (plan) plan.select(true, true);
-  }
+  };
   scope.mapItems = { markers: [] };
 
   scope.__planmodel = PlanModel;

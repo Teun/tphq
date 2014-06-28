@@ -1,11 +1,17 @@
-﻿var request = require('supertest')
+// Bootstrap models
+var models_path = __dirname + '/models'
+var fs = require('fs');
+fs.readdirSync(models_path).forEach(function (file) {
+  require(models_path + '/' + file);
+});
+
+var request = require('supertest')
 var expect = require("expect.js");
 var express = require('express');
 var app = express();
 var config = require("./config");
 var routes = require("./config/routes");
-var TPHQ = require("./public/js/tphq.js");
-config.appCfg(app);
+config.appCfg(app, config);
 routes.init(app);
 
 describe("My suite", function () {
