@@ -23,7 +23,7 @@ block central
               textarea.edit(data-bind="value:plan.description")
 
 
-  div(data-bind="visible:selectedPlace")
+  div(data-bind="if:selectedIsPlace")
     div.well.well-lg(data-bind="with:selectedPlace")
       div#editor
         table.table
@@ -63,6 +63,51 @@ block central
             td
             td 
               button.btn.btn-primary#btn-done(onclick="TPHQ.select(null);") Done
+
+  div(data-bind="if:selectedIsTravel")
+    div.well.well-lg(data-bind="with:selectedPlace")
+      div#editor
+        table.table
+          tr
+            td
+            td
+            | Here the editor for the travel step
+          tr
+            td Mode of transportation
+            td
+              div.btn-group
+                button.btn(data-bind="css:$data.buttonModeClass('plane'), click:function(){setMode('plane')}", title="plane") 
+                  span.glyphtphq.glyph-plane
+                button.btn(data-bind="css:$data.buttonModeClass('car'), click:function(){setMode('car')}", title="car") 
+                  span.glyphtphq.glyph-car
+                button.btn(data-bind="css:$data.buttonModeClass('bus'), click:function(){setMode('bus')}", title="bus")
+                  span.glyphtphq.glyph-bus
+                button.btn(data-bind="css:$data.buttonModeClass('train'), click:function(){setMode('train')}", title="train") 
+                  span.glyphtphq.glyph-train
+                button.btn(data-bind="css:$data.buttonModeClass('bicycle'), click:function(){setMode('bicycle')}", title="bicycle")
+                  span.glyphtphq.glyph-bicycle
+                button.btn(data-bind="css:$data.buttonModeClass('motorcycle'), click:function(){setMode('motorcycle')}", title="motorcycle")
+                  span.glyphtphq.glyph-motorcycle
+                button.btn(data-bind="css:$data.buttonModeClass('boat'), click:function(){setMode('boat')}", title="boat")
+                  span.glyphtphq.glyph-boat
+                button.btn(data-bind="css:$data.buttonModeClass('walk'), click:function(){setMode('walk')}", title="walk")
+                  span.glyphtphq.glyph-walk
+                button.btn(data-bind="css:$data.buttonModeClass('rocket'), click:function(){setMode('rocket')}", title="rocket")
+                  span.glyphtphq.glyph-rocket
+          tr
+            td Description
+            td
+              textarea.edit(data-bind="value:description")
+          tr
+            td Sights along the way
+            td
+              //div(data-bind="text: ko.toJSON(sights)")
+              div(data-bind="template:{name:'sight-list', data:$data.sights}")
+          tr
+            td
+            td 
+              button.btn.btn-primary#btn-done(onclick="TPHQ.select(null);") Done
+
 
   div 
     button.btn#btn-save-plan(data-bind="attr:{'class': ($data.dirty() ? 'btn btn-primary' : 'btn disabled' )}", data-content="Saved", data-placement="right") Save plan

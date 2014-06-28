@@ -1,3 +1,4 @@
+/*jshint laxcomma: true*/
 var express = require('express');
 var passport = require('passport');
 var mongoStore = require('connect-mongo')(express);
@@ -30,7 +31,7 @@ exports.appCfg = function (app, cfg) {
   app.use(express.methodOverride());
 
   // cookieParser should be above session
-  app.use(express.cookieParser())
+  app.use(express.cookieParser());
   // express/mongo session storage
   app.use(express.session({
     secret: cfg.data.userStore.secret,
@@ -38,14 +39,14 @@ exports.appCfg = function (app, cfg) {
       url: cfg.data.userStore.conn,
       collection: 'sessions'
     })
-  }))
+  }));
 
   // connect flash for flash messages
-  app.use(flash())
+  app.use(flash());
 
   // use passport session
-  app.use(passport.initialize())
-  app.use(passport.session())
+  app.use(passport.initialize());
+  app.use(passport.session());
 
   app.use(app.router);
   app.use(require('stylus').middleware(path.join(__dirname, 'public')));
@@ -71,14 +72,14 @@ exports.passportCfg = function (passport, config) {
 
   // serialize sessions
   passport.serializeUser(function(user, done) {
-    done(null, user.id)
-  })
+    done(null, user.id);
+  });
 
   passport.deserializeUser(function(id, done) {
     User.findOne({ _id: id }, function (err, user) {
-      done(err, user)
-    })
-  })
+      done(err, user);
+    });
+  });
 
   // use local strategy
   passport.use(new LocalStrategy({
@@ -87,15 +88,15 @@ exports.passportCfg = function (passport, config) {
   },
     function (email, password, done) {
       User.findOne({ email: email }, function (err, user) {
-        if (err) { return done(err) }
+        if (err) { return done(err); }
         if (!user) {
-          return done(null, false, { message: 'Unknown user' })
+          return done(null, false, { message: 'Unknown user' });
         }
         if (!user.authenticate(password)) {
-          return done(null, false, { message: 'Invalid password' })
+          return done(null, false, { message: 'Invalid password' });
         }
-        return done(null, user)
-      })
+        return done(null, user);
+      });
     }
   ));
 
@@ -107,7 +108,7 @@ exports.passportCfg = function (passport, config) {
   },
     function (accessToken, refreshToken, profile, done) {
       User.findOne({ 'facebook.id': profile.id }, function (err, user) {
-        if (err) { return done(err) }
+        if (err) { return done(err); }
         if (!user) {
           console.log(profile);
           user = new User({
@@ -115,17 +116,17 @@ exports.passportCfg = function (passport, config) {
             , username: profile.id
             , provider: 'facebook'
             , facebook: profile._json
-          })
+          });
           user.save(function (err) {
-            if (err) console.log(err)
-            return done(err, user)
-          })
+            if (err) console.log(err);
+            return done(err, user);
+          });
         }
         else {
-          return done(err, user)
+          return done(err, user);
         }
-      })
+      });
     }
   ));
-}
+};
 

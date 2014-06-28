@@ -5,14 +5,14 @@
 
 // Bootstrap models
 var fs = require('fs');
-var models_path = __dirname + '/models'
+var models_path = __dirname + '/models';
 fs.readdirSync(models_path).forEach(function (file) {
   require(models_path + '/' + file);
 });
 
 var express = require('express');
 var routes = require('./config/routes');
-var config = require('./config')
+var config = require('./config');
 var http = require('http');
 var path = require('path');
 var passport = require('passport');
